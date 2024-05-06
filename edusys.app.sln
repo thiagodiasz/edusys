@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Web", "1 - Web", "{B8ED6F79-4404-414E-96CA-8144184911BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "edusys.Api", "server\edusys.Api\edusys.Api.csproj", "{003C3AD3-ED1F-4EC3-89D1-D7357DF41143}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{003C3AD3-ED1F-4EC3-89D1-D7357DF41143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{003C3AD3-ED1F-4EC3-89D1-D7357DF41143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{003C3AD3-ED1F-4EC3-89D1-D7357DF41143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{003C3AD3-ED1F-4EC3-89D1-D7357DF41143}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{003C3AD3-ED1F-4EC3-89D1-D7357DF41143} = {B8ED6F79-4404-414E-96CA-8144184911BF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D978729-863E-4CB8-B175-9F57CD7B217E}
+	EndGlobalSection
+EndGlobal
