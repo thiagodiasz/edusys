@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using edusys.Api.Entities;
@@ -11,9 +12,11 @@ using edusys.Api.Entities;
 namespace edusys.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240521011325_atualizabanco")]
+    partial class atualizabanco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,10 +76,20 @@ namespace edusys.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CursoId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Nome")
                         .HasColumnType("text");
 
+                    b.Property<int>("ProfessorId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CursoId");
+
+                    b.HasIndex("ProfessorId");
 
                     b.ToTable("Disciplina");
                 });
@@ -182,6 +195,33 @@ namespace edusys.Api.Migrations
                     b.ToTable("Nota");
                 });
 
+            modelBuilder.Entity("edusys.Api.Entities.Professor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DataNascimento")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("EnderecoId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Telefone")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnderecoId");
+
+                    b.ToTable("Professor");
+                });
+
             modelBuilder.Entity("edusys.Api.Entities.Aluno", b =>
                 {
                     b.HasOne("edusys.Api.Entities.Endereco", "Endereco")
@@ -189,6 +229,21 @@ namespace edusys.Api.Migrations
                         .HasForeignKey("EnderecoId");
 
                     b.Navigation("Endereco");
+                });
+
+            modelBuilder.Entity("edusys.Api.Entities.Disciplina", b =>
+                {
+                    b.HasOne("edusys.Api.Entities.Curso", null)
+                        .WithMany("ListaDisciplina")
+                        .HasForeignKey("CursoId");
+
+                    b.HasOne("edusys.Api.Entities.Professor", "Professor")
+                        .WithMany()
+                        .HasForeignKey("ProfessorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Professor");
                 });
 
             modelBuilder.Entity("edusys.Api.Entities.Endereco", b =>
@@ -234,6 +289,22 @@ namespace edusys.Api.Migrations
                     b.Navigation("Disciplina");
 
                     b.Navigation("Matricula");
+                });
+
+            modelBuilder.Entity("edusys.Api.Entities.Professor", b =>
+                {
+                    b.HasOne("edusys.Api.Entities.Endereco", "Endereco")
+                        .WithMany()
+                        .HasForeignKey("EnderecoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Endereco");
+                });
+
+            modelBuilder.Entity("edusys.Api.Entities.Curso", b =>
+                {
+                    b.Navigation("ListaDisciplina");
                 });
 #pragma warning restore 612, 618
         }
