@@ -23,6 +23,7 @@ namespace edusys.Api.Repositories
 
         public async Task<Aluno> Inserir(Aluno Aluno)
         {
+            //Execute procecedure             
             await _context.Aluno.AddAsync(Aluno);
             return Aluno;
         }
@@ -35,6 +36,8 @@ namespace edusys.Api.Repositories
 
         public async Task<IEnumerable<Aluno>> ObterTodos()
         {
+            //Query que retorna os alunos (chamada da view)
+
             return await _context.Aluno.ToListAsync();
         }
 

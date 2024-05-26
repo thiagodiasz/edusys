@@ -8,7 +8,7 @@ namespace edusys.Api.Entities
     {
         [Key]
         public int Id { get; set; }
-        public string? Matricula { get; set; }
+        public string? Numero { get; set; }
         public int? AlunoId { get; set; }
         public virtual Aluno? Aluno { get; set; }
         public int? CursoId { get; set; }

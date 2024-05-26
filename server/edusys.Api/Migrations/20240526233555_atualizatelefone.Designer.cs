@@ -12,8 +12,8 @@ using edusys.Api.Entities;
 namespace edusys.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240526213258_UpdateDisc")]
-    partial class UpdateDisc
+    [Migration("20240526233555_atualizatelefone")]
+    partial class atualizatelefone
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,18 +76,20 @@ namespace edusys.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DisciplinaId")
+                    b.Property<int>("CursoId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Nome")
                         .HasColumnType("text");
 
-                    b.Property<int>("materiaId")
+                    b.Property<int>("ProfessorId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("materiaId");
+                    b.HasIndex("CursoId");
+
+                    b.HasIndex("ProfessorId");
 
                     b.ToTable("Disciplina");
                 });
@@ -178,9 +180,6 @@ namespace edusys.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AlunoId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("DisciplinaId")
                         .HasColumnType("integer");
 
@@ -191,8 +190,6 @@ namespace edusys.Api.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AlunoId");
 
                     b.HasIndex("DisciplinaId");
 
@@ -216,18 +213,39 @@ namespace edusys.Api.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("TelefoneId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EnderecoId");
 
+                    b.HasIndex("TelefoneId");
+
                     b.ToTable("Professor");
+                });
+
+            modelBuilder.Entity("edusys.Api.Entities.Telefone", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DDD")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Telefone");
                 });
 
             modelBuilder.Entity("edusys.Api.Entities.Aluno", b =>
@@ -241,13 +259,21 @@ namespace edusys.Api.Migrations
 
             modelBuilder.Entity("edusys.Api.Entities.Disciplina", b =>
                 {
-                    b.HasOne("edusys.Api.Entities.Disciplina", "materia")
-                        .WithMany()
-                        .HasForeignKey("materiaId")
+                    b.HasOne("edusys.Api.Entities.Curso", "Curso")
+                        .WithMany("Disciplinas")
+                        .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("materia");
+                    b.HasOne("edusys.Api.Entities.Professor", "Professor")
+                        .WithMany()
+                        .HasForeignKey("ProfessorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Curso");
+
+                    b.Navigation("Professor");
                 });
 
             modelBuilder.Entity("edusys.Api.Entities.Endereco", b =>
@@ -278,12 +304,6 @@ namespace edusys.Api.Migrations
 
             modelBuilder.Entity("edusys.Api.Entities.Nota", b =>
                 {
-                    b.HasOne("edusys.Api.Entities.Aluno", "Aluno")
-                        .WithMany()
-                        .HasForeignKey("AlunoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("edusys.Api.Entities.Disciplina", "Disciplina")
                         .WithMany()
                         .HasForeignKey("DisciplinaId")
@@ -295,8 +315,6 @@ namespace edusys.Api.Migrations
                         .HasForeignKey("MatriculaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Aluno");
 
                     b.Navigation("Disciplina");
 
@@ -311,7 +329,18 @@ namespace edusys.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("edusys.Api.Entities.Telefone", "Telefone")
+                        .WithMany()
+                        .HasForeignKey("TelefoneId");
+
                     b.Navigation("Endereco");
+
+                    b.Navigation("Telefone");
+                });
+
+            modelBuilder.Entity("edusys.Api.Entities.Curso", b =>
+                {
+                    b.Navigation("Disciplinas");
                 });
 #pragma warning restore 612, 618
         }

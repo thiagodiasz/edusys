@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace edusys.Api.Entities
 {
-    [Table("Curso")]
-    public class Curso
+    [Table("Telefone")]
+    public class Telefone
     {
         [Key]
         public int Id { get; set; }
-        public string? Nome { get; set; }
-        public virtual IList<Disciplina> Disciplinas { get; set; }
+        public string DDD { get; set; }
+        public string Numero {  get; set; }
     }
 }

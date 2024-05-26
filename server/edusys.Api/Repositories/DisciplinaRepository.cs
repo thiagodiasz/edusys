@@ -10,27 +10,28 @@ namespace edusys.Api.Repositories
         {
             _context = context;
         }
-        public Task<DisciplinaRepository> Editar(DisciplinaRepository Disciplina)
+
+        public Task<Disciplina> Editar(Disciplina Disciplina)
         {
             throw new NotImplementedException();
         }
 
-        public void Excluir(DisciplinaRepository Disciplina)
+        public void Excluir(Disciplina Disciplina)
         {
             throw new NotImplementedException();
         }
 
-        public Task<DisciplinaRepository> Inserir(DisciplinaRepository Disciplina)
+        public Task<Disciplina> Inserir(Disciplina Disciplina)
         {
             throw new NotImplementedException();
         }
 
-        public Task<DisciplinaRepository> ObterPeloId(int DisciplinaId)
+        public Task<Disciplina> ObterPeloId(int DisciplinaId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<DisciplinaRepository>> ObterTodos()
+        public Task<IEnumerable<Disciplina>> ObterTodos()
         {
             throw new NotImplementedException();
         }

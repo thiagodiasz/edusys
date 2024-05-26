@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace edusys.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class atualizabanco : Migration
+    public partial class atualizabanco4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -112,6 +112,7 @@ namespace edusys.Api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Numero = table.Column<string>(type: "text", nullable: true),
                     AlunoId = table.Column<int>(type: "integer", nullable: true),
                     CursoId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -138,7 +139,7 @@ namespace edusys.Api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Nome = table.Column<string>(type: "text", nullable: true),
                     ProfessorId = table.Column<int>(type: "integer", nullable: false),
-                    CursoId = table.Column<int>(type: "integer", nullable: true)
+                    CursoId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,7 +148,8 @@ namespace edusys.Api.Migrations
                         name: "FK_Disciplina_Curso_CursoId",
                         column: x => x.CursoId,
                         principalTable: "Curso",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Disciplina_Professor_ProfessorId",
                         column: x => x.ProfessorId,
