@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace edusys.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class @new : Migration
+    public partial class atualizabanco : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,19 +23,6 @@ namespace edusys.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Curso", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Disciplina",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nome = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Disciplina", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,12 +85,33 @@ namespace edusys.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Professor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "text", nullable: true),
+                    DataNascimento = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Telefone = table.Column<string>(type: "text", nullable: true),
+                    EnderecoId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Professor", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Professor_Endereco_EnderecoId",
+                        column: x => x.EnderecoId,
+                        principalTable: "Endereco",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Matricula",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Numero = table.Column<string>(type: "text", nullable: true),
                     AlunoId = table.Column<int>(type: "integer", nullable: true),
                     CursoId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -122,6 +131,32 @@ namespace edusys.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Disciplina",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "text", nullable: true),
+                    ProfessorId = table.Column<int>(type: "integer", nullable: false),
+                    CursoId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Disciplina", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Disciplina_Curso_CursoId",
+                        column: x => x.CursoId,
+                        principalTable: "Curso",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Disciplina_Professor_ProfessorId",
+                        column: x => x.ProfessorId,
+                        principalTable: "Professor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Nota",
                 columns: table => new
                 {
@@ -129,18 +164,11 @@ namespace edusys.Api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Valor = table.Column<string>(type: "text", nullable: true),
                     DisciplinaId = table.Column<int>(type: "integer", nullable: false),
-                    MatriculaId = table.Column<int>(type: "integer", nullable: false),
-                    AlunoId = table.Column<int>(type: "integer", nullable: false)
+                    MatriculaId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Nota", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Nota_Aluno_AlunoId",
-                        column: x => x.AlunoId,
-                        principalTable: "Aluno",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Nota_Disciplina_DisciplinaId",
                         column: x => x.DisciplinaId,
@@ -161,6 +189,16 @@ namespace edusys.Api.Migrations
                 column: "EnderecoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Disciplina_CursoId",
+                table: "Disciplina",
+                column: "CursoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Disciplina_ProfessorId",
+                table: "Disciplina",
+                column: "ProfessorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Endereco_EstadoId",
                 table: "Endereco",
                 column: "EstadoId");
@@ -176,11 +214,6 @@ namespace edusys.Api.Migrations
                 column: "CursoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Nota_AlunoId",
-                table: "Nota",
-                column: "AlunoId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Nota_DisciplinaId",
                 table: "Nota",
                 column: "DisciplinaId");
@@ -189,6 +222,11 @@ namespace edusys.Api.Migrations
                 name: "IX_Nota_MatriculaId",
                 table: "Nota",
                 column: "MatriculaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Professor_EnderecoId",
+                table: "Professor",
+                column: "EnderecoId");
         }
 
         /// <inheritdoc />
@@ -202,6 +240,9 @@ namespace edusys.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Matricula");
+
+            migrationBuilder.DropTable(
+                name: "Professor");
 
             migrationBuilder.DropTable(
                 name: "Aluno");

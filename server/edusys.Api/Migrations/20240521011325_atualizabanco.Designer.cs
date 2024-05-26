@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using edusys.Api.Entities;
@@ -11,9 +12,11 @@ using edusys.Api.Entities;
 namespace edusys.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240521011325_atualizabanco")]
+    partial class atualizabanco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,7 +234,7 @@ namespace edusys.Api.Migrations
             modelBuilder.Entity("edusys.Api.Entities.Disciplina", b =>
                 {
                     b.HasOne("edusys.Api.Entities.Curso", null)
-                        .WithMany("Disciplinas")
+                        .WithMany("ListaDisciplina")
                         .HasForeignKey("CursoId");
 
                     b.HasOne("edusys.Api.Entities.Professor", "Professor")
@@ -301,7 +304,7 @@ namespace edusys.Api.Migrations
 
             modelBuilder.Entity("edusys.Api.Entities.Curso", b =>
                 {
-                    b.Navigation("Disciplinas");
+                    b.Navigation("ListaDisciplina");
                 });
 #pragma warning restore 612, 618
         }

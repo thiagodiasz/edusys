@@ -9,5 +9,6 @@ namespace edusys.Api.Entities
         [Key]
         public int Id { get; set; }
         public string? Nome { get; set; }
+        public IList<Disciplina> Disciplinas { get; set; }
     }
 }
