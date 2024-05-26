@@ -9,7 +9,7 @@ namespace edusys.Api.Entities
         [Key]
         public int Id { get; set; }
         public string? Nome { get; set; }
-        public int ProfessorId { get; set; }
-        public virtual Professor Professor { get; set; }
+        public int DisciplinaId { get; set; }
+        public virtual Disciplina materia { get; set; }
     }
 }

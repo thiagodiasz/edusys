@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using edusys.Api.Entities;
@@ -11,9 +12,11 @@ using edusys.Api.Entities;
 namespace edusys.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240526192032_UpdateProfessor")]
+    partial class UpdateProfessor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,18 +76,15 @@ namespace edusys.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DisciplinaId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Nome")
                         .HasColumnType("text");
 
-                    b.Property<int>("materiaId")
+                    b.Property<int>("ProfessorId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("materiaId");
+                    b.HasIndex("ProfessorId");
 
                     b.ToTable("Disciplina");
                 });
@@ -238,13 +238,13 @@ namespace edusys.Api.Migrations
 
             modelBuilder.Entity("edusys.Api.Entities.Disciplina", b =>
                 {
-                    b.HasOne("edusys.Api.Entities.Disciplina", "materia")
+                    b.HasOne("edusys.Api.Entities.Professor", "Professor")
                         .WithMany()
-                        .HasForeignKey("materiaId")
+                        .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("materia");
+                    b.Navigation("Professor");
                 });
 
             modelBuilder.Entity("edusys.Api.Entities.Endereco", b =>

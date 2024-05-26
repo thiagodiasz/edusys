@@ -20,8 +20,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
 builder.Services.AddScoped<ICursoRepository, CursoRepository>();
-
-
+builder.Services.AddScoped<IProfessorRepository, ProfessorRepository>();
+builder.Services.AddScoped<IDisciplinaRepository, DisciplinaRepository>();
+builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+builder.Services.AddScoped<INotaRepository, NotaRepository>();
+builder.Services.AddScoped<IMatriculaRepository, MatriculaRepository>();
+builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

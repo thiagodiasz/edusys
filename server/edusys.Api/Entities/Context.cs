@@ -15,6 +15,7 @@ namespace edusys.Api.Entities
         public DbSet<Estado> Estado { get; set; }
         public DbSet<Matricula> Matricula { get; set; }
         public DbSet<Nota> Nota { get; set; }
+        public DbSet<Professor> Professor { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
