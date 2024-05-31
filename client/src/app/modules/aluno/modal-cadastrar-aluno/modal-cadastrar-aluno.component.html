@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Cadastrar Aluno</h2>
+<mat-divider></mat-divider>
+<div mat-dialog-content>  
+  <form class="example-form"> 
+    <table class="example-full-width" cellspacing="0"><tr>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>Nome completo</mat-label>
+        <input matInput>
+      </mat-form-field></td>
+    </tr></table>
+      <mat-form-field class="example-full-width">
+        <mat-label>Sexo</mat-label>
+        <input matInput>
+      </mat-form-field>  
+    <table class="example-full-width" cellspacing="0"><tr>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>Bairo</mat-label>
+        <input matInput placeholder="Ex. San Francisco">
+      </mat-form-field></td>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>Cidade</mat-label>
+        <input matInput placeholder="Ex. California">
+      </mat-form-field></td>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>Número</mat-label>
+        <input matInput>
+      </mat-form-field></td>
+      <tr>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>CEP</mat-label>
+        <input matInput #postalCode maxlength="9" placeholder="Ex. 94105">
+        <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
+      </mat-form-field></td>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>Estado</mat-label>
+        <input matInput>
+      </mat-form-field></td>
+      <td><mat-form-field class="example-full-width">
+        <mat-label>UF</mat-label>
+        <input matInput>
+      </mat-form-field></td>
+    </tr></table>
+  </form>
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close>
+   Cancelar
+  </button>
+ <button mat-raised-button color="primary">Salvar</button>
+</mat-dialog-actions>

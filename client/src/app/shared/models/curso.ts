@@ -1,9 +1,8 @@
-export class Curso {
+import { Disciplina } from "./disciplina";
+
+export interface Curso {
     id: number;
     nome: string;
-    
-    constructor(id: number, nome: string) {
-      this.id = id;
-      this.nome = nome;
-    }
+    disciplinas: Disciplina[];   
+
 }
