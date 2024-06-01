@@ -13,5 +13,6 @@ namespace edusys.Api.Entities
         public virtual Disciplina? Disciplina { get; set; }
         public int MatriculaId { get; set; }
         public virtual Matricula? Matricula { get; set; }
+       
     }
 }

@@ -16,10 +16,17 @@ namespace edusys.Api.Entities
         public DbSet<Matricula> Matricula { get; set; }
         public DbSet<Nota> Nota { get; set; }
         public DbSet<Professor> Professor { get; set; }
+        public DbSet<Telefone> Telefone { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-       
+            modelBuilder.Entity<Aluno>()
+                 .HasOne(a => a.Endereco)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Curso>()
+                 .HasMany(a => a.Disciplinas);
         }
     }
 }

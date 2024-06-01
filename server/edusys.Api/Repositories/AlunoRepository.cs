@@ -11,36 +11,35 @@ namespace edusys.Api.Repositories
         {
             _context = context;
         }
-        public Task<Aluno> Editar(Aluno Aluno)
+        //public void Task<T> Inserir(Aluno Aluno)
+        //{
+        //    //Execute procecedure             
+        //    await _context.Aluno.AddAsync(Aluno);
+        //    return Aluno;
+        //}
+
+        public async Task<Aluno> ObterPeloId(int alunoId)
         {
-            throw new NotImplementedException();
+            var aluno = await _context.Aluno
+                           .AsNoTracking()
+                            .Include(a => a.Endereco)
+                                .ThenInclude(e => e.Estado)
+                            .Include(a => a.Telefone)
+                           .FirstOrDefaultAsync(a => a.Id == alunoId);
+
+            return aluno;
         }
 
-        public void Excluir(Aluno Aluno)
+        public async Task<Aluno[]> ObterTodos()
         {
-            throw new NotImplementedException();
-        }
 
-        public async Task<Aluno> Inserir(Aluno Aluno)
-        {
-            await _context.Aluno.AddAsync(Aluno);
-            return Aluno;
-        }
+            IQueryable<Aluno> consulta = _context.Aluno.AsNoTracking();
 
-        public async Task<Aluno> ObterPeloId(int AlunoId)
-        {
-            var Aluno = await _context.Aluno.Where(x => x.Id == AlunoId).FirstOrDefaultAsync();
-            return Aluno;
-        }
-
-        public async Task<IEnumerable<Aluno>> ObterTodos()
-        {
-            return await _context.Aluno.ToListAsync();
-        }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
+            consulta = consulta
+                 .Include(a => a.Endereco)
+                 .ThenInclude(e => e.Estado)
+                 .Include(a => a.Telefone).OrderBy(x => x.Id);
+            return await consulta.ToArrayAsync();
+        }      
     }
 }

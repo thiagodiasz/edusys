@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace edusys.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class atualizabanco : Migration
+    public partial class ajusta_endereco : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,6 +37,20 @@ namespace edusys.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Estado", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Telefone",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DDD = table.Column<string>(type: "text", nullable: false),
+                    Numero = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Telefone", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,7 +86,7 @@ namespace edusys.Api.Migrations
                     Nome = table.Column<string>(type: "text", nullable: true),
                     Sexo = table.Column<string>(type: "text", nullable: true),
                     EnderecoId = table.Column<int>(type: "integer", nullable: true),
-                    Telefone = table.Column<string>(type: "text", nullable: true)
+                    TelefoneId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -81,6 +95,12 @@ namespace edusys.Api.Migrations
                         name: "FK_Aluno_Endereco_EnderecoId",
                         column: x => x.EnderecoId,
                         principalTable: "Endereco",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Aluno_Telefone_TelefoneId",
+                        column: x => x.TelefoneId,
+                        principalTable: "Telefone",
                         principalColumn: "Id");
                 });
 
@@ -92,7 +112,7 @@ namespace edusys.Api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Nome = table.Column<string>(type: "text", nullable: true),
                     DataNascimento = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Telefone = table.Column<string>(type: "text", nullable: true),
+                    TelefoneId = table.Column<int>(type: "integer", nullable: true),
                     EnderecoId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -104,6 +124,11 @@ namespace edusys.Api.Migrations
                         principalTable: "Endereco",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Professor_Telefone_TelefoneId",
+                        column: x => x.TelefoneId,
+                        principalTable: "Telefone",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -112,6 +137,7 @@ namespace edusys.Api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Numero = table.Column<string>(type: "text", nullable: true),
                     AlunoId = table.Column<int>(type: "integer", nullable: true),
                     CursoId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -138,7 +164,7 @@ namespace edusys.Api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Nome = table.Column<string>(type: "text", nullable: true),
                     ProfessorId = table.Column<int>(type: "integer", nullable: false),
-                    CursoId = table.Column<int>(type: "integer", nullable: true)
+                    CursoId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,7 +173,8 @@ namespace edusys.Api.Migrations
                         name: "FK_Disciplina_Curso_CursoId",
                         column: x => x.CursoId,
                         principalTable: "Curso",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Disciplina_Professor_ProfessorId",
                         column: x => x.ProfessorId,
@@ -186,7 +213,13 @@ namespace edusys.Api.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Aluno_EnderecoId",
                 table: "Aluno",
-                column: "EnderecoId");
+                column: "EnderecoId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Aluno_TelefoneId",
+                table: "Aluno",
+                column: "TelefoneId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Disciplina_CursoId",
@@ -227,6 +260,11 @@ namespace edusys.Api.Migrations
                 name: "IX_Professor_EnderecoId",
                 table: "Professor",
                 column: "EnderecoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Professor_TelefoneId",
+                table: "Professor",
+                column: "TelefoneId");
         }
 
         /// <inheritdoc />
@@ -252,6 +290,9 @@ namespace edusys.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Endereco");
+
+            migrationBuilder.DropTable(
+                name: "Telefone");
 
             migrationBuilder.DropTable(
                 name: "Estado");

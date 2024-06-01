@@ -1,98 +1,126 @@
 ﻿using edusys.Api.Entities;
 using edusys.Api.Repositories.Interfaces;
+using edusys.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace edusys.Api.Controllers
 {
     [ApiController]
     public class AlunoController : Controller
-    {        
-            private readonly IAlunoRepository _AlunoRepository;
+    {
+        private readonly IAlunoService _alunoService;
+        public AlunoController(IAlunoService alunoService)
+        {
+            _alunoService = alunoService;
+        }
 
-            public AlunoController(IAlunoRepository AlunoRepository)
+        /// <summary>
+        /// Obter todos Alunos.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("aluno")]
+        public async Task<IActionResult> ObterTodosAlunos()
+        {
+            try
             {
-                _AlunoRepository = AlunoRepository;
+                var alunos = await _alunoService.ObterTodos();
+                if (alunos == null) return NotFound("Nenhum aluno encontrado");
+                
+                return Ok(alunos);
             }
-            /// <summary>
-            /// Obter todos Alunos.
-            /// </summary>
-            /// <returns></returns>
-            [HttpGet("Aluno/obterTodos")]
-            public async Task<ActionResult<IEnumerable<Aluno>>> ObterTodosAlunos()
+            catch (Exception)
             {
-                return Ok(await _AlunoRepository.ObterTodos());
+        
+                  return BadRequest("Ocorreu um erro ao salvar Aluno"); ;
             }
-
-
-            [HttpPost("Aluno/cadastrarAluno")]
-            public async Task<ActionResult> CadastrarAluno(Aluno Aluno)
+        }
+        
+        
+        [HttpPost("aluno/inserir")]
+        public async Task<IActionResult> Inserir([FromBody] Aluno model)
+        {
+            try
             {
-                await _AlunoRepository.Inserir(Aluno);
+            
+                var aluno = await _alunoService.Inserir(model);
 
-                if (await _AlunoRepository.SaveAllAsync())
-                {
-                    return Ok("Aluno cadastrado com sucesso");
-                }
-                return BadRequest("Ocorreu um erro ao salvar Aluno");
+                if (aluno == null) return BadRequest("Erro ao inserir aluno");
+
+                return Ok(new { message = "Aluno cadastrado com sucesso", aluno = aluno });
             }
-
-            /// <summary>
-            /// Editar um Aluno.
-            /// </summary>
-            /// <returns></returns>
-            [HttpPut("Aluno/editarAluno")]
-            public async Task<ActionResult> EditarAluno(Aluno Aluno)
+            catch (Exception)
             {
-                await _AlunoRepository.Editar(Aluno);
-
-                if (await _AlunoRepository.SaveAllAsync())
-                {
-                    return Ok("Aluno editada com sucesso");
-                }
-                return BadRequest("Ocorreu um erro ao alterar Aluno");
+        
+                throw new Exception("Erro ao inserir aluno");
             }
+           
+        }
 
-            /// <summary>
-            /// Excluir um Aluno por Id.
-            /// </summary>
-            /// <param name="id">int</param>
-            /// <returns></returns>
-            [HttpDelete("Aluno/excluirAluno/{id}")]
-            public async Task<ActionResult> ExcluirAluno(int id)
+        /// <summary>
+        /// Editar um Aluno.
+        /// <param name="id">int</param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("aluno/atualizar/{id}")]
+        public async Task<IActionResult> Atualizar(int id, Aluno model)
+        {
+            try
             {
-                var Aluno = await _AlunoRepository.ObterPeloId(id);
+                var aluno = await _alunoService.Atualizar(id, model);
 
-                if (Aluno == null)
-                {
-                    return NotFound("Usuário não encontrado");
-                }
+                if (aluno == null) return BadRequest("Erro ao atualizar aluno");
 
-                _AlunoRepository.Excluir(Aluno);
-
-                if (await _AlunoRepository.SaveAllAsync())
-                {
-                    return Ok("Usuário excluído com sucesso");
-                }
-
-                return BadRequest("Ocorreu um erro ao excluir um Usuário");
+                return Ok(new { message = "Aluno cadastrado com sucesso", aluno = aluno });
             }
-
-            /// <summary>
-            /// Obter Usuário por Id.
-            /// </summary>
-            /// <param name="id">int</param>
-            /// <returns></returns>
-            [HttpGet("Aluno/obterPorId/{id}")]
-            public async Task<ActionResult> ObterPorId(int id)
+            catch (Exception ex)
             {
-                var Aluno = await _AlunoRepository.ObterPeloId(id);
 
-                if (Aluno == null)
-                {
-                    return NotFound("Empresa não encontrado");
-                }
-
-                return Ok(Aluno);
+                throw new Exception(ex.Message);
             }
+
+        }
+
+        /// <summary>
+        /// Excluir um Aluno por Id.
+        /// </summary>
+        /// <param name="id">int</param>
+        /// <returns></returns>
+        [HttpDelete("aluno/excluir/{id}")]
+        public async Task<IActionResult> ExcluirAluno(int id)
+        {
+            try
+            {
+                return await _alunoService.Excluir(id) ?
+                Ok(new { message = "Aluno excluido com sucesso" }) :
+                    BadRequest("Não foi possível excluir o aluno");
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+            
+        }
+        
+        /// <summary>
+        /// Obter Usuário por Id.
+        /// </summary>
+        /// <param name="id">int</param>
+        /// <returns></returns>
+        [HttpGet("aluno/{id}")]
+        public async Task<ActionResult> ObterPorId(int id)
+        {
+            try
+            {
+                var alunos = await _alunoService.ObterPeloId(id);
+                if (alunos == null) return NotFound("Nenhum aluno encontrado");
+        
+                return Ok(alunos);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ocorreu um erro ao recuperar Aluno");
+            }
+        }
         }    
 }

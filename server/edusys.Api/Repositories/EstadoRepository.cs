@@ -1,5 +1,6 @@
 ﻿using edusys.Api.Entities;
 using edusys.Api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace edusys.Api.Repositories
 {
@@ -25,9 +26,12 @@ namespace edusys.Api.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Estado> ObterPeloId(int EstadoID)
+        public async Task<Estado> ObterPeloId(int estadoId)
         {
-            throw new NotImplementedException();
+            var estado = await _context.Estado
+                               .FirstOrDefaultAsync(a => a.Id == estadoId);
+
+            return estado;
         }
 
         public Task<IEnumerable<Estado>> ObterTodos()

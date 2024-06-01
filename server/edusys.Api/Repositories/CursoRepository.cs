@@ -11,36 +11,29 @@ namespace edusys.Api.Repositories
         {
             _context = context;
         }
-        public Task<Curso> Editar(Curso Curso)
+        //public void Task<T> Inserir(Curso Curso)
+        //{
+        //    //Execute procecedure             
+        //    await _context.Curso.AddAsync(Curso);
+        //    return Curso;
+        //}
+
+        public async Task<Curso> ObterPeloId(int cursoId)
         {
-            throw new NotImplementedException();
+            var curso = await _context.Curso
+                           .AsNoTracking()
+                           .FirstOrDefaultAsync(a => a.Id == cursoId);
+
+            return curso;
         }
 
-        public void Excluir(Curso Curso)
+        public async Task<Curso[]> ObterTodos()
         {
-            throw new NotImplementedException();
-        }
 
-        public async Task<Curso> Inserir(Curso Curso)
-        {
-            await _context.Curso.AddAsync(Curso);
-            return Curso;
-        }
+            IQueryable<Curso> consulta = _context.Curso.AsNoTracking();
 
-        public async Task<Curso> ObterPeloId(int CursoId)
-        {
-            var Curso = await _context.Curso.Where(x => x.Id == CursoId).FirstOrDefaultAsync();
-            return Curso;
-        }
-
-        public async Task<IEnumerable<Curso>> ObterTodos()
-        {
-            return await _context.Curso.ToListAsync();
-        }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
+            consulta = consulta.Include(e => e.Disciplinas).OrderBy(x => x.Id);
+            return await consulta.ToArrayAsync();
+        }      
     }
 }
