@@ -22,7 +22,9 @@ namespace edusys.Api.Repositories
         {
             var aluno = await _context.Aluno
                            .AsNoTracking()
-                           .Include(a => a.Endereco)                            
+                            .Include(a => a.Endereco)
+                                .ThenInclude(e => e.Estado)
+                            .Include(a => a.Telefone)
                            .FirstOrDefaultAsync(a => a.Id == alunoId);
 
             return aluno;
@@ -33,7 +35,10 @@ namespace edusys.Api.Repositories
 
             IQueryable<Aluno> consulta = _context.Aluno.AsNoTracking();
 
-            consulta = consulta.OrderBy(x => x.Id);
+            consulta = consulta
+                 .Include(a => a.Endereco)
+                 .ThenInclude(e => e.Estado)
+                 .Include(a => a.Telefone).OrderBy(x => x.Id);
             return await consulta.ToArrayAsync();
         }      
     }

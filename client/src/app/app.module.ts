@@ -26,6 +26,7 @@ import { ListaCursoComponent } from './modules/curso/lista-curso/lista-curso.com
 import { ModalModule, BsModalRef } from 'ngx-bootstrap/modal';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { ToastrModule, provideToastr } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -34,8 +35,7 @@ import { FormsModule } from '@angular/forms';
     HeaderComponent,
     SidenavComponent,
     ListaAlunoComponent,
-    ListaCursoComponent
-    
+    ListaCursoComponent    
   ],
   exports:[MatTableModule, MatDialogModule],
   imports: [
@@ -62,7 +62,9 @@ import { FormsModule } from '@angular/forms';
      MatDialogTitle, 
      MatDialogContent,
      MatFormFieldModule,
-     FormsModule
+     FormsModule,
+     ToastrModule.forRoot(),
+     
     
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
@@ -70,6 +72,7 @@ import { FormsModule } from '@angular/forms';
   providers: [    
     BsModalRef,
     provideAnimationsAsync(),
+    provideToastr(),
     //{provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
   ]
 })

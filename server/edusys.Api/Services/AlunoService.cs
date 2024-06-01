@@ -8,17 +8,27 @@ namespace edusys.Api.Services
     {
         private readonly IBaseRepository _baseRepository;
         private readonly IAlunoRepository _alunoRepository;
+        private readonly IEstadoRepository _estadoRepository;
 
-        public AlunoService(IBaseRepository baseRepository, IAlunoRepository alunoRepository)
+        public AlunoService(IBaseRepository baseRepository, IAlunoRepository alunoRepository, IEstadoRepository estadoRepository)
         {
             _baseRepository = baseRepository;
             _alunoRepository = alunoRepository;
-        }     
+            _estadoRepository = estadoRepository;
+        }
 
         public async Task<Aluno> Inserir(Aluno model)
         {
             try
             {
+                if (model.Endereco != null && model.Endereco.Estado != null)
+                {
+                    if (model.Endereco.EstadoId == 0)
+                    {
+                        model.Endereco.EstadoId = model.Endereco.Estado.Id;
+                    }
+                }
+                model.Endereco.Estado = await _estadoRepository.ObterPeloId(model.Endereco.EstadoId);
                 _baseRepository.Add<Aluno>(model);
                 if(await _baseRepository.SaveChangesAsync())
                 {

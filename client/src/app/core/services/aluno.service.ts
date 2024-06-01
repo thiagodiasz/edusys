@@ -19,16 +19,17 @@ export class AlunoService extends BaseService{
      obterTodos(): Observable<Aluno[]>{
         return this.http.get<Aluno[]>(this.url, super.ObterHeaderJson())
      }
-     obterPorId(id: string): Observable<Aluno> {
+     obterPorId(id: number): Observable<Aluno> {
       return this.http.get<Aluno>(`${this.url}/${id}`, super.ObterHeaderJson());
     }
-    inserir(request: Aluno):void {
-      this.http.post(this.url + '/inserir', request, super.ObterHeaderJson());
+    inserir(aluno: Aluno): Observable<Aluno> {
+      debugger
+      return this.http.post<Aluno>(`${this.url}/inserir`, aluno, super.ObterHeaderJson());
     }
-    atualizar(request: Aluno): Observable<Aluno> {
-      return this.http.put<Aluno>(this.url + '/atualizar', request, super.ObterHeaderJson());
+    atualizar(id: number, request: Aluno): Observable<Aluno> {
+      return this.http.put<Aluno>(`${this.url}/atualizar/${id}`, request, super.ObterHeaderJson());
     }
     excluir(id: number): Observable<Aluno> {
-      return this.http.delete<Aluno>(this.url + '/excluir?id=' + id, super.ObterHeaderJson());
+      return this.http.delete<Aluno>(this.url + '/excluir/' + id, super.ObterHeaderJson());
     }
     }

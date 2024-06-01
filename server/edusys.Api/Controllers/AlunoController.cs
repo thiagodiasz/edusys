@@ -37,7 +37,7 @@ namespace edusys.Api.Controllers
         
         
         [HttpPost("aluno/inserir")]
-        public async Task<IActionResult> Inserir(Aluno model)
+        public async Task<IActionResult> Inserir([FromBody] Aluno model)
         {
             try
             {
@@ -45,8 +45,8 @@ namespace edusys.Api.Controllers
                 var aluno = await _alunoService.Inserir(model);
 
                 if (aluno == null) return BadRequest("Erro ao inserir aluno");
-                
-                return Ok("Aluno cadastrado com sucesso");
+
+                return Ok(new { message = "Aluno cadastrado com sucesso", aluno = aluno });
             }
             catch (Exception)
             {
@@ -69,8 +69,8 @@ namespace edusys.Api.Controllers
                 var aluno = await _alunoService.Atualizar(id, model);
 
                 if (aluno == null) return BadRequest("Erro ao atualizar aluno");
-                
-                return Ok("Aluno atualizado com sucesso");
+
+                return Ok(new { message = "Aluno cadastrado com sucesso", aluno = aluno });
             }
             catch (Exception ex)
             {
@@ -91,7 +91,7 @@ namespace edusys.Api.Controllers
             try
             {
                 return await _alunoService.Excluir(id) ?
-                Ok("Aluno deletado"):
+                Ok(new { message = "Aluno excluido com sucesso" }) :
                     BadRequest("Não foi possível excluir o aluno");
             }
             catch (Exception ex)

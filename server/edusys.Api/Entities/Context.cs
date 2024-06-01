@@ -22,10 +22,9 @@ namespace edusys.Api.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Aluno>()
-                 .HasOne(a => a.Endereco) 
-                 .WithOne() 
-                 .HasForeignKey<Endereco>(e => e.Id) 
-                 .OnDelete(DeleteBehavior.Cascade);
+                 .HasOne(a => a.Endereco)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Curso>()
                  .HasMany(a => a.Disciplinas);
         }

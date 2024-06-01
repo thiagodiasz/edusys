@@ -12,8 +12,8 @@ using edusys.Api.Entities;
 namespace edusys.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240526233555_atualizatelefone")]
-    partial class atualizatelefone
+    [Migration("20240601150717_ajusta_endereco")]
+    partial class ajusta_endereco
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,12 +42,15 @@ namespace edusys.Api.Migrations
                     b.Property<string>("Sexo")
                         .HasColumnType("text");
 
-                    b.Property<string>("Telefone")
-                        .HasColumnType("text");
+                    b.Property<int?>("TelefoneId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId");
+                    b.HasIndex("EnderecoId")
+                        .IsUnique();
+
+                    b.HasIndex("TelefoneId");
 
                     b.ToTable("Aluno");
                 });
@@ -251,10 +254,17 @@ namespace edusys.Api.Migrations
             modelBuilder.Entity("edusys.Api.Entities.Aluno", b =>
                 {
                     b.HasOne("edusys.Api.Entities.Endereco", "Endereco")
+                        .WithOne()
+                        .HasForeignKey("edusys.Api.Entities.Aluno", "EnderecoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("edusys.Api.Entities.Telefone", "Telefone")
                         .WithMany()
-                        .HasForeignKey("EnderecoId");
+                        .HasForeignKey("TelefoneId");
 
                     b.Navigation("Endereco");
+
+                    b.Navigation("Telefone");
                 });
 
             modelBuilder.Entity("edusys.Api.Entities.Disciplina", b =>
