@@ -1,0 +1,127 @@
+<h2 mat-dialog-title color="mat-primary">Cadastrar Aluno</h2>
+<mat-divider></mat-divider>
+<div mat-dialog-content>
+  <form [formGroup]="formCadastro" (ngSubmit)="onSubmit()">
+    <h2>Dados Pessoais</h2>
+    <mat-form-field class="example-full-width">
+      <mat-label>Nome completo</mat-label>
+      <input matInput formControlName="nome"  value="formCadastro.get('nome').value || ''" required/>
+      <mat-error *ngIf="formCadastro.get('nome')?.hasError('required')" >
+        Nome é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width ml-2">
+      <mat-label>Sexo</mat-label>
+      <mat-select formControlName="sexo" [value]="formCadastro.get('sexo')?.value || ''" required>
+        <mat-option *ngFor="let option of sexoOptions" [value]="option.value">
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formCadastro.get('sexo')?.hasError('required')">
+        Sexo é obrigatório
+      </mat-error>
+    </mat-form-field>
+    
+    <mat-divider></mat-divider>
+    <h2>Endereço</h2>
+    <div formGroupName="endereco">
+      <mat-form-field class="example-full-width">
+        <mat-label>Bairro</mat-label>
+        <input matInput formControlName="bairro" [value]="formCadastro.get('endereco.bairro')?.value || ''" required />
+        <mat-error
+          *ngIf="formCadastro.get('endereco.bairro')?.hasError('required')"
+        >
+          Bairro é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width ml-2">
+        <mat-label>Complemento</mat-label>
+        <input matInput formControlName="complemento" [value]="formCadastro.get('endereco.complemento')?.value || ''" required />
+        <mat-error
+          *ngIf="formCadastro.get('endereco.Complemento')?.hasError('required')"
+        >
+          Complemento é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width ml-2">
+        <mat-label>Cidade</mat-label>
+        <input matInput formControlName="cidade" required [value]="formCadastro.get('endereco.cidade')?.value || ''"/>
+        <mat-error
+          *ngIf="formCadastro.get('endereco.cidade')?.hasError('required')"
+        >
+          Cidade é obrigatória
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width ml-2">
+        <mat-label>Número</mat-label>
+        <input matInput formControlName="numero" required [value]="formCadastro.get('endereco.numero')?.value || ''" />
+        <mat-error
+          *ngIf="formCadastro.get('endereco.numero')?.hasError('required')"
+        >
+          Número é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width ml-2">
+        <mat-label>CEP</mat-label>
+        <input matInput formControlName="cep" required  [value]="formCadastro.get('endereco.cep')?.value || ''"/>
+        <mat-error
+          *ngIf="formCadastro.get('endereco.cep')?.hasError('required')"
+        >
+          CEP é obrigatório
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-full-width ml-2">
+        <mat-label>UF</mat-label>
+        <mat-select formControlName="estadoId" [value]="formCadastro.get('endereco.estadoId')?.value || ''" required>
+          <mat-option *ngFor="let uf of ufOptions" [value]="uf.id">
+            {{ uf.sigla }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formCadastro.get('endereco.estadoId')?.hasError('required')">
+          UF é obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <mat-divider></mat-divider>
+    <h2>Telefone</h2>
+    <div formGroupName="telefone">
+      <mat-form-field class="example-full-width">
+        <mat-label>DDD</mat-label>
+        <input matInput formControlName="ddd" required  [value]="formCadastro.get('telefone.ddd')?.value || ''" />
+        <mat-error
+          *ngIf="formCadastro.get('telefone.ddd')?.hasError('required')"
+        >
+          DDD é obrigatório
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field class="example-full-width ml-2">
+        <mat-label>Número de Telefone</mat-label>
+        <input matInput formControlName="numero" required [value]="formCadastro.get('telefone.numero')?.value || ''" />
+        <mat-error
+          *ngIf="formCadastro.get('telefone.numero')?.hasError('required')"
+        >
+          Número de telefone é obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-dialog-actions>
+      <button mat-raised-button mat-dialog-close>Cancelar</button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="formCadastro.invalid"
+      >
+        Salvar
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>
+<mat-divider></mat-divider>

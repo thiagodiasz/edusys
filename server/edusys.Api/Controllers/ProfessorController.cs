@@ -1,5 +1,6 @@
 ﻿using edusys.Api.Entities;
 using edusys.Api.Repositories.Interfaces;
+using edusys.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace edusys.Api.Controllers
@@ -7,49 +8,76 @@ namespace edusys.Api.Controllers
     [ApiController]
     public class ProfessorController : Controller
     {
-        private readonly IProfessorRepository _professorRepository;
-
-        public ProfessorController(IProfessorRepository professorRepository)
+        private readonly IProfessorService _professorService;
+        public ProfessorController(IProfessorService professorService)
         {
-            _professorRepository = professorRepository;
+            _professorService = professorService;
         }
+
         /// <summary>
-        /// Obter todos Professors.
+        /// Obter todos Professores.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("professor/obterTodos")]
-        public async Task<ActionResult<IEnumerable<Professor>>> ObterTodosProfessors()
+        [HttpGet("professor")]
+        public async Task<IActionResult> ObterTodosProfessores()
         {
-            return Ok(await _professorRepository.ObterTodos());
+            try
+            {
+                var professores = await _professorService.ObterTodos();
+                if (professores == null) return NotFound("Nenhum professor encontrado");
+
+                return Ok(professores);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest("Ocorreu um erro ao salvar Professor"); ;
+            }
         }
 
 
-        [HttpPost("professor/cadastrarProfessor")]
-        public async Task<ActionResult> CadastrarProfessor(Professor Professor)
+        [HttpPost("professor/inserir")]
+        public async Task<IActionResult> Inserir([FromBody] Professor model)
         {
-            await _professorRepository.Inserir(Professor);
-
-            if (await _professorRepository.SaveAllAsync())
+            try
             {
-                return Ok("Professor cadastrado com sucesso");
+
+                var professor = await _professorService.Inserir(model);
+
+                if (professor == null) return BadRequest("Erro ao inserir professor");
+
+                return Ok(new { message = "Professor cadastrado com sucesso", professor = professor });
             }
-            return BadRequest("Ocorreu um erro ao salvar Professor");
+            catch (Exception)
+            {
+
+                throw new Exception("Erro ao inserir professor");
+            }
+
         }
 
         /// <summary>
         /// Editar um Professor.
+        /// <param name="id">int</param>
         /// </summary>
         /// <returns></returns>
-        [HttpPut("Professor/editarProfessor")]
-        public async Task<ActionResult> EditarProfessor(Professor Professor)
+        [HttpPut("professor/atualizar/{id}")]
+        public async Task<IActionResult> Atualizar(int id, Professor model)
         {
-            await _professorRepository.Editar(Professor);
-
-            if (await _professorRepository.SaveAllAsync())
+            try
             {
-                return Ok("Professor editada com sucesso");
+                var professor = await _professorService.Atualizar(id, model);
+
+                if (professor == null) return BadRequest("Erro ao atualizar professor");
+
+                return Ok(new { message = "Professor cadastrado com sucesso", professor = professor });
             }
-            return BadRequest("Ocorreu um erro ao alterar Professor");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -57,42 +85,42 @@ namespace edusys.Api.Controllers
         /// </summary>
         /// <param name="id">int</param>
         /// <returns></returns>
-        [HttpDelete("professor/excluirProfessor/{id}")]
-        public async Task<ActionResult> ExcluirProfessor(int id)
+        [HttpDelete("professor/excluir/{id}")]
+        public async Task<IActionResult> ExcluirProfessor(int id)
         {
-            var professor = await _professorRepository.ObterPeloId(id);
-
-            if (professor == null)
+            try
             {
-                return NotFound("Professor não encontrado");
+                return await _professorService.Excluir(id) ?
+                Ok(new { message = "Professor excluido com sucesso" }) :
+                    BadRequest("Não foi possível excluir o professor");
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
             }
 
-            _professorRepository.Excluir(professor);
-
-            if (await _professorRepository.SaveAllAsync())
-            {
-                return Ok("Professor excluído com sucesso");
-            }
-
-            return BadRequest("Ocorreu um erro ao excluir um Professor");
         }
 
         /// <summary>
-        /// Obter Professor por Id.
+        /// Obter Usuário por Id.
         /// </summary>
         /// <param name="id">int</param>
         /// <returns></returns>
-        [HttpGet("professor/obterPorId/{id}")]
+        [HttpGet("professor/{id}")]
         public async Task<ActionResult> ObterPorId(int id)
         {
-            var professor = await _professorRepository.ObterPeloId(id);
-
-            if (professor == null)
+            try
             {
-                return NotFound("Professor não encontrado");
-            }
+                var professores = await _professorService.ObterPeloId(id);
+                if (professores == null) return NotFound("Nenhum professor encontrado");
 
-            return Ok(professor);
+                return Ok(professores);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ocorreu um erro ao recuperar Professor");
+            }
         }
     }
 }

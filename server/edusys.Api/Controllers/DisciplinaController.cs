@@ -1,5 +1,6 @@
 ﻿using edusys.Api.Entities;
 using edusys.Api.Repositories.Interfaces;
+using edusys.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace edusys.Api.Controllers
@@ -7,49 +8,76 @@ namespace edusys.Api.Controllers
     [ApiController]
     public class DisciplinaController : Controller
     {
-        private readonly IDisciplinaRepository _disciplinaRepository;
-
-        public DisciplinaController(IDisciplinaRepository disciplinaRepository)
+        private readonly IDisciplinaService _disciplinaService;
+        public DisciplinaController(IDisciplinaService disciplinaService)
         {
-            _disciplinaRepository = disciplinaRepository;
+            _disciplinaService = disciplinaService;
         }
+
         /// <summary>
         /// Obter todos Disciplinas.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("disciplina/obterTodos")]
-        public async Task<ActionResult<IEnumerable<Disciplina>>> ObterTodosDisciplinas()
+        [HttpGet("disciplina")]
+        public async Task<IActionResult> ObterTodosDisciplinas()
         {
-            return Ok(await _disciplinaRepository.ObterTodos());
+            try
+            {
+                var disciplinas = await _disciplinaService.ObterTodos();
+                if (disciplinas == null) return NotFound("Nenhum disciplina encontrado");
+
+                return Ok(disciplinas);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest("Ocorreu um erro ao salvar Disciplina"); ;
+            }
         }
 
 
-        [HttpPost("disciplina/cadastrarDisciplina")]
-        public async Task<ActionResult> CadastrarDisciplina(Disciplina Disciplina)
+        [HttpPost("disciplina/inserir")]
+        public async Task<IActionResult> Inserir([FromBody] Disciplina model)
         {
-            await _disciplinaRepository.Inserir(Disciplina);
-
-            if (await _disciplinaRepository.SaveAllAsync())
+            try
             {
-                return Ok("Disciplina cadastrado com sucesso");
+
+                var disciplina = await _disciplinaService.Inserir(model);
+
+                if (disciplina == null) return BadRequest("Erro ao inserir disciplina");
+
+                return Ok(new { message = "Disciplina cadastrado com sucesso", disciplina = disciplina });
             }
-            return BadRequest("Ocorreu um erro ao salvar Disciplina");
+            catch (Exception)
+            {
+
+                throw new Exception("Erro ao inserir disciplina");
+            }
+
         }
 
         /// <summary>
         /// Editar um Disciplina.
+        /// <param name="id">int</param>
         /// </summary>
         /// <returns></returns>
-        [HttpPut("Disciplina/editarDisciplina")]
-        public async Task<ActionResult> EditarDisciplina(Disciplina Disciplina)
+        [HttpPut("disciplina/atualizar/{id}")]
+        public async Task<IActionResult> Atualizar(int id, Disciplina model)
         {
-            await _disciplinaRepository.Editar(Disciplina);
-
-            if (await _disciplinaRepository.SaveAllAsync())
+            try
             {
-                return Ok("Disciplina editada com sucesso");
+                var disciplina = await _disciplinaService.Atualizar(id, model);
+
+                if (disciplina == null) return BadRequest("Erro ao atualizar disciplina");
+
+                return Ok(new { message = "Disciplina cadastrado com sucesso", disciplina = disciplina });
             }
-            return BadRequest("Ocorreu um erro ao alterar Disciplina");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -57,42 +85,42 @@ namespace edusys.Api.Controllers
         /// </summary>
         /// <param name="id">int</param>
         /// <returns></returns>
-        [HttpDelete("disciplina/excluirDisciplina/{id}")]
-        public async Task<ActionResult> ExcluirDisciplina(int id)
+        [HttpDelete("disciplina/excluir/{id}")]
+        public async Task<IActionResult> ExcluirDisciplina(int id)
         {
-            var disciplina = await _disciplinaRepository.ObterPeloId(id);
-
-            if (disciplina == null)
+            try
             {
-                return NotFound("Disciplina não encontrado");
+                return await _disciplinaService.Excluir(id) ?
+                Ok(new { message = "Disciplina excluido com sucesso" }) :
+                    BadRequest("Não foi possível excluir o disciplina");
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
             }
 
-            _disciplinaRepository.Excluir(disciplina);
-
-            if (await _disciplinaRepository.SaveAllAsync())
-            {
-                return Ok("Disciplina excluído com sucesso");
-            }
-
-            return BadRequest("Ocorreu um erro ao excluir um Disciplina");
         }
 
         /// <summary>
-        /// Obter Disciplina por Id.
+        /// Obter Usuário por Id.
         /// </summary>
         /// <param name="id">int</param>
         /// <returns></returns>
-        [HttpGet("disciplina/obterPorId/{id}")]
+        [HttpGet("disciplina/{id}")]
         public async Task<ActionResult> ObterPorId(int id)
         {
-            var disciplina = await _disciplinaRepository.ObterPeloId(id);
-
-            if (disciplina == null)
+            try
             {
-                return NotFound("Disciplina não encontrado");
-            }
+                var disciplinas = await _disciplinaService.ObterPeloId(id);
+                if (disciplinas == null) return NotFound("Nenhum disciplina encontrado");
 
-            return Ok(disciplina);
+                return Ok(disciplinas);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ocorreu um erro ao recuperar Disciplina");
+            }
         }
     }
 }

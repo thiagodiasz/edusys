@@ -1,5 +1,6 @@
 ﻿using edusys.Api.Entities;
 using edusys.Api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace edusys.Api.Repositories
 {
@@ -10,34 +11,34 @@ namespace edusys.Api.Repositories
         {
             _context = context;
         }
-        public Task<Professor> Editar(Nota Nota)
+        //public void Task<T> Inserir(Nota Nota)
+        //{
+        //    //Execute procecedure             
+        //    await _context.Nota.AddAsync(Nota);
+        //    return Nota;
+        //}
+
+        public async Task<Nota> ObterPeloId(int notaId)
         {
-            throw new NotImplementedException();
+            var nota = await _context.Nota
+                           .AsNoTracking()
+                            .Include(d => d.Disciplina)
+                                .ThenInclude(c => c.Curso)
+                           .FirstOrDefaultAsync(a => a.Id == notaId);
+
+            return nota;
         }
 
-        public void Excluir(Nota Nota)
+        public async Task<Nota[]> ObterTodos()
         {
-            throw new NotImplementedException();
-        }
 
-        public Task<Professor> Inserir(Nota Nota)
-        {
-            throw new NotImplementedException();
-        }
+            IQueryable<Nota> consulta = _context.Nota.AsNoTracking();
 
-        public Task<Nota> ObterPeloId(int NotaId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Nota>> ObterTodos()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> SaveAllAsync()
-        {
-            throw new NotImplementedException();
+            consulta = consulta
+                 .Include(d => d.Disciplina)
+                 .ThenInclude((c => c.Curso));
+            
+            return await consulta.ToArrayAsync();
         }
     }
 }

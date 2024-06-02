@@ -1,4 +1,4 @@
-import { Telefone } from "./Telefone";
+import { Telefone } from "./telefone";
 import { Endereco } from "./endereco";
 import { Matricula } from "./matricula";
 

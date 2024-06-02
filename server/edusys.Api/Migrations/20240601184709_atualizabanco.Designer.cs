@@ -12,8 +12,8 @@ using edusys.Api.Entities;
 namespace edusys.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240601150717_ajusta_endereco")]
-    partial class ajusta_endereco
+    [Migration("20240601184709_atualizabanco")]
+    partial class atualizabanco
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

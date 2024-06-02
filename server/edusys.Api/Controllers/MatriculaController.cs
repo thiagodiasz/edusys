@@ -1,5 +1,6 @@
 ﻿using edusys.Api.Entities;
 using edusys.Api.Repositories.Interfaces;
+using edusys.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace edusys.Api.Controllers
@@ -7,49 +8,76 @@ namespace edusys.Api.Controllers
     [ApiController]
     public class MatriculaController : Controller
     {
-        private readonly IMatriculaRepository _matriculaRepository;
-
-        public MatriculaController(IMatriculaRepository matriculaRepository)
+        private readonly IMatriculaService _matriculaService;
+        public MatriculaController(IMatriculaService matriculaService)
         {
-            _matriculaRepository = matriculaRepository;
+            _matriculaService = matriculaService;
         }
+
         /// <summary>
         /// Obter todos Matriculas.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("matricula/obterTodos")]
-        public async Task<ActionResult<IEnumerable<Matricula>>> ObterTodosMatriculas()
+        [HttpGet("matricula")]
+        public async Task<IActionResult> ObterTodosMatriculas()
         {
-            return Ok(await _matriculaRepository.ObterTodos());
+            try
+            {
+                var matriculas = await _matriculaService.ObterTodos();
+                if (matriculas == null) return NotFound("Nenhum matricula encontrado");
+
+                return Ok(matriculas);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest("Ocorreu um erro ao salvar Matricula"); ;
+            }
         }
 
 
-        [HttpPost("matricula/cadastrarMatricula")]
-        public async Task<ActionResult> CadastrarMatricula(Matricula Matricula)
+        [HttpPost("matricula/inserir")]
+        public async Task<IActionResult> Inserir([FromBody] Matricula model)
         {
-            await _matriculaRepository.Inserir(Matricula);
-
-            if (await _matriculaRepository.SaveAllAsync())
+            try
             {
-                return Ok("Matricula cadastrado com sucesso");
+
+                var matricula = await _matriculaService.Inserir(model);
+
+                if (matricula == null) return BadRequest("Erro ao inserir matricula");
+
+                return Ok(new { message = "Matricula cadastrado com sucesso", matricula = matricula });
             }
-            return BadRequest("Ocorreu um erro ao salvar Matricula");
+            catch (Exception)
+            {
+
+                throw new Exception("Erro ao inserir matricula");
+            }
+
         }
 
         /// <summary>
         /// Editar um Matricula.
+        /// <param name="id">int</param>
         /// </summary>
         /// <returns></returns>
-        [HttpPut("Matricula/editarMatricula")]
-        public async Task<ActionResult> EditarMatricula(Matricula Matricula)
+        [HttpPut("matricula/atualizar/{id}")]
+        public async Task<IActionResult> Atualizar(int id, Matricula model)
         {
-            await _matriculaRepository.Editar(Matricula);
-
-            if (await _matriculaRepository.SaveAllAsync())
+            try
             {
-                return Ok("Matricula editada com sucesso");
+                var matricula = await _matriculaService.Atualizar(id, model);
+
+                if (matricula == null) return BadRequest("Erro ao atualizar matricula");
+
+                return Ok(new { message = "Matricula cadastrado com sucesso", matricula = matricula });
             }
-            return BadRequest("Ocorreu um erro ao alterar Matricula");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -57,42 +85,42 @@ namespace edusys.Api.Controllers
         /// </summary>
         /// <param name="id">int</param>
         /// <returns></returns>
-        [HttpDelete("matricula/excluirMatricula/{id}")]
-        public async Task<ActionResult> ExcluirMatricula(int id)
+        [HttpDelete("matricula/excluir/{id}")]
+        public async Task<IActionResult> ExcluirMatricula(int id)
         {
-            var matricula = await _matriculaRepository.ObterPeloId(id);
-
-            if (matricula == null)
+            try
             {
-                return NotFound("Matricula não encontrado");
+                return await _matriculaService.Excluir(id) ?
+                Ok(new { message = "Matricula excluido com sucesso" }) :
+                    BadRequest("Não foi possível excluir o matricula");
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
             }
 
-            _matriculaRepository.Excluir(matricula);
-
-            if (await _matriculaRepository.SaveAllAsync())
-            {
-                return Ok("Matricula excluído com sucesso");
-            }
-
-            return BadRequest("Ocorreu um erro ao excluir um Matricula");
         }
 
         /// <summary>
-        /// Obter Matricula por Id.
+        /// Obter Usuário por Id.
         /// </summary>
         /// <param name="id">int</param>
         /// <returns></returns>
-        [HttpGet("matricula/obterPorId/{id}")]
+        [HttpGet("matricula/{id}")]
         public async Task<ActionResult> ObterPorId(int id)
         {
-            var matricula = await _matriculaRepository.ObterPeloId(id);
-
-            if (matricula == null)
+            try
             {
-                return NotFound("Matricula não encontrado");
-            }
+                var matriculas = await _matriculaService.ObterPeloId(id);
+                if (matriculas == null) return NotFound("Nenhum matricula encontrado");
 
-            return Ok(matricula);
+                return Ok(matriculas);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ocorreu um erro ao recuperar Matricula");
+            }
         }
     }
 }

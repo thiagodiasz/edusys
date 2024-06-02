@@ -25,35 +25,35 @@ namespace edusys.Api.Controllers
             {
                 var cursos = await _cursoService.ObterTodos();
                 if (cursos == null) return NotFound("Nenhum curso encontrado");
-                
+
                 return Ok(cursos);
             }
             catch (Exception)
             {
-        
-                  return BadRequest("Ocorreu um erro ao salvar Curso"); ;
+
+                return BadRequest("Ocorreu um erro ao salvar Curso"); ;
             }
         }
-        
-        
+
+
         [HttpPost("curso/inserir")]
-        public async Task<IActionResult> Inserir(Curso model)
+        public async Task<IActionResult> Inserir([FromBody] Curso model)
         {
             try
             {
-            
+
                 var curso = await _cursoService.Inserir(model);
 
                 if (curso == null) return BadRequest("Erro ao inserir curso");
-                
-                return Ok("Curso cadastrado com sucesso");
+
+                return Ok(new { message = "Curso cadastrado com sucesso", curso = curso });
             }
             catch (Exception)
             {
-        
+
                 throw new Exception("Erro ao inserir curso");
             }
-           
+
         }
 
         /// <summary>
@@ -69,8 +69,8 @@ namespace edusys.Api.Controllers
                 var curso = await _cursoService.Atualizar(id, model);
 
                 if (curso == null) return BadRequest("Erro ao atualizar curso");
-                
-                return Ok("Curso atualizado com sucesso");
+
+                return Ok(new { message = "Curso cadastrado com sucesso", curso = curso });
             }
             catch (Exception ex)
             {
@@ -91,7 +91,7 @@ namespace edusys.Api.Controllers
             try
             {
                 return await _cursoService.Excluir(id) ?
-                Ok("Curso deletado"):
+                Ok(new { message = "Curso excluido com sucesso" }) :
                     BadRequest("Não foi possível excluir o curso");
             }
             catch (Exception ex)
@@ -99,9 +99,9 @@ namespace edusys.Api.Controllers
 
                 throw new Exception(ex.Message);
             }
-            
+
         }
-        
+
         /// <summary>
         /// Obter Usuário por Id.
         /// </summary>
@@ -114,7 +114,7 @@ namespace edusys.Api.Controllers
             {
                 var cursos = await _cursoService.ObterPeloId(id);
                 if (cursos == null) return NotFound("Nenhum curso encontrado");
-        
+
                 return Ok(cursos);
             }
             catch (Exception)
@@ -122,5 +122,5 @@ namespace edusys.Api.Controllers
                 return BadRequest("Ocorreu um erro ao recuperar Curso");
             }
         }
-        }    
+    }
 }

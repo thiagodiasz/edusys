@@ -11,36 +11,35 @@ namespace edusys.Api.Repositories
         {
             _context = context;
         }
-        public Task<Professor> Editar(Professor Professor)
+        //public void Task<T> Inserir(Professor Professor)
+        //{
+        //    //Execute procecedure             
+        //    await _context.Professor.AddAsync(Professor);
+        //    return Professor;
+        //}
+
+        public async Task<Professor> ObterPeloId(int professorId)
         {
-            throw new NotImplementedException();
+            var professor = await _context.Professor
+                           .AsNoTracking()
+                            .Include(a => a.Endereco)
+                                .ThenInclude(e => e.Estado)
+                            .Include(a => a.Telefone)
+                           .FirstOrDefaultAsync(a => a.Id == professorId);
+
+            return professor;
         }
 
-        public void Excluir(Professor Professor)
+        public async Task<Professor[]> ObterTodos()
         {
-            throw new NotImplementedException();
-        }
 
-        public async Task<Professor> Inserir(Professor Professor)
-        {
-            await _context.Professor.AddAsync(Professor);
-            return Professor;
-        }
+            IQueryable<Professor> consulta = _context.Professor.AsNoTracking();
 
-        public async Task<Professor> ObterPeloId(int ProfessorId)
-        {
-            var Professor = await _context.Professor.Where(x => x.Id == ProfessorId).FirstOrDefaultAsync();
-            return Professor;
-        }
-
-        public async Task<IEnumerable<Professor>> ObterTodos()
-        {
-            return await _context.Professor.ToListAsync();
-        }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
+            consulta = consulta
+                 .Include(a => a.Endereco)
+                 .ThenInclude(e => e.Estado)
+                 .Include(a => a.Telefone).OrderBy(x => x.Id);
+            return await consulta.ToArrayAsync();
         }
     }
 }

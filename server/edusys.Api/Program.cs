@@ -38,6 +38,11 @@ builder.Services.AddScoped<IBaseRepository, BaseRepository>();
 
 builder.Services.AddScoped<IAlunoService, AlunoService>();
 builder.Services.AddScoped<ICursoService, CursoService>();
+builder.Services.AddScoped<IProfessorService, ProfessorService>();
+builder.Services.AddScoped<IDisciplinaService, DisciplinaService>();
+builder.Services.AddScoped<INotaService, NotaService>();
+builder.Services.AddScoped<IMatriculaService, MatriculaService>();
+
 
 var app = builder.Build();
 

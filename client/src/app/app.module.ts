@@ -27,6 +27,7 @@ import { ModalModule, BsModalRef } from 'ngx-bootstrap/modal';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule, provideToastr } from 'ngx-toastr';
+import { ListaProfessorComponent } from './modules/professor/lista-professor/lista-professor.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ToastrModule, provideToastr } from 'ngx-toastr';
     HeaderComponent,
     SidenavComponent,
     ListaAlunoComponent,
-    ListaCursoComponent    
+    ListaCursoComponent,
+    ListaProfessorComponent   
   ],
   exports:[MatTableModule, MatDialogModule],
   imports: [

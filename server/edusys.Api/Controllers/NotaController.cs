@@ -1,5 +1,6 @@
 ﻿using edusys.Api.Entities;
 using edusys.Api.Repositories.Interfaces;
+using edusys.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace edusys.Api.Controllers
@@ -7,49 +8,76 @@ namespace edusys.Api.Controllers
     [ApiController]
     public class NotaController : Controller
     {
-        private readonly INotaRepository _notaRepository;
-
-        public NotaController(INotaRepository notaRepository)
+        private readonly INotaService _notaService;
+        public NotaController(INotaService notaService)
         {
-            _notaRepository = notaRepository;
+            _notaService = notaService;
         }
+
         /// <summary>
         /// Obter todos Notas.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("nota/obterTodos")]
-        public async Task<ActionResult<IEnumerable<Nota>>> ObterTodosNotas()
+        [HttpGet("nota")]
+        public async Task<IActionResult> ObterTodosNotas()
         {
-            return Ok(await _notaRepository.ObterTodos());
+            try
+            {
+                var notas = await _notaService.ObterTodos();
+                if (notas == null) return NotFound("Nenhum nota encontrado");
+
+                return Ok(notas);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest("Ocorreu um erro ao salvar Nota"); ;
+            }
         }
 
 
-        [HttpPost("nota/cadastrarNota")]
-        public async Task<ActionResult> CadastrarNota(Nota Nota)
+        [HttpPost("nota/inserir")]
+        public async Task<IActionResult> Inserir([FromBody] Nota model)
         {
-            await _notaRepository.Inserir(Nota);
-
-            if (await _notaRepository.SaveAllAsync())
+            try
             {
-                return Ok("Nota cadastrado com sucesso");
+
+                var nota = await _notaService.Inserir(model);
+
+                if (nota == null) return BadRequest("Erro ao inserir nota");
+
+                return Ok(new { message = "Nota cadastrado com sucesso", nota = nota });
             }
-            return BadRequest("Ocorreu um erro ao salvar Nota");
+            catch (Exception)
+            {
+
+                throw new Exception("Erro ao inserir nota");
+            }
+
         }
 
         /// <summary>
         /// Editar um Nota.
+        /// <param name="id">int</param>
         /// </summary>
         /// <returns></returns>
-        [HttpPut("Nota/editarNota")]
-        public async Task<ActionResult> EditarNota(Nota Nota)
+        [HttpPut("nota/atualizar/{id}")]
+        public async Task<IActionResult> Atualizar(int id, Nota model)
         {
-            await _notaRepository.Editar(Nota);
-
-            if (await _notaRepository.SaveAllAsync())
+            try
             {
-                return Ok("Nota editada com sucesso");
+                var nota = await _notaService.Atualizar(id, model);
+
+                if (nota == null) return BadRequest("Erro ao atualizar nota");
+
+                return Ok(new { message = "Nota cadastrado com sucesso", nota = nota });
             }
-            return BadRequest("Ocorreu um erro ao alterar Nota");
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -57,42 +85,42 @@ namespace edusys.Api.Controllers
         /// </summary>
         /// <param name="id">int</param>
         /// <returns></returns>
-        [HttpDelete("nota/excluirNota/{id}")]
-        public async Task<ActionResult> ExcluirNota(int id)
+        [HttpDelete("nota/excluir/{id}")]
+        public async Task<IActionResult> ExcluirNota(int id)
         {
-            var nota = await _notaRepository.ObterPeloId(id);
-
-            if (nota == null)
+            try
             {
-                return NotFound("Nota não encontrado");
+                return await _notaService.Excluir(id) ?
+                Ok(new { message = "Nota excluido com sucesso" }) :
+                    BadRequest("Não foi possível excluir o nota");
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
             }
 
-            _notaRepository.Excluir(nota);
-
-            if (await _notaRepository.SaveAllAsync())
-            {
-                return Ok("Nota excluído com sucesso");
-            }
-
-            return BadRequest("Ocorreu um erro ao excluir um Nota");
         }
 
         /// <summary>
-        /// Obter Nota por Id.
+        /// Obter Usuário por Id.
         /// </summary>
         /// <param name="id">int</param>
         /// <returns></returns>
-        [HttpGet("nota/obterPorId/{id}")]
+        [HttpGet("nota/{id}")]
         public async Task<ActionResult> ObterPorId(int id)
         {
-            var nota = await _notaRepository.ObterPeloId(id);
-
-            if (nota == null)
+            try
             {
-                return NotFound("Nota não encontrado");
-            }
+                var notas = await _notaService.ObterPeloId(id);
+                if (notas == null) return NotFound("Nenhum nota encontrado");
 
-            return Ok(nota);
+                return Ok(notas);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ocorreu um erro ao recuperar Nota");
+            }
         }
     }
 }

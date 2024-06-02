@@ -4,11 +4,7 @@ namespace edusys.Api.Repositories.Interfaces
 {
     public interface IMatriculaRepository
     {
-        Task<Professor> Inserir(Matricula Matricula);
-        Task<Professor> Editar(Matricula Matricula);
-        void Excluir(Matricula EstaMatriculado);
-        Task<Matricula> ObterPeloId(int MatriculaId);
-        Task<IEnumerable<Matricula>> ObterTodos();
-        Task<bool> SaveAllAsync();
+        Task<Matricula> ObterPeloId(int matriculaId);
+        Task<Matricula[]> ObterTodos();
     }
 }

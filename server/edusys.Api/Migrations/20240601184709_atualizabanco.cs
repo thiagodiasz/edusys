@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace edusys.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class ajusta_endereco : Migration
+    public partial class atualizabanco : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
