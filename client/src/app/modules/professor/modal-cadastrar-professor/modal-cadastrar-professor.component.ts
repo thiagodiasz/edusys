@@ -141,8 +141,6 @@ export class ModalCadastrarProfessorComponent implements OnInit {
     }
   }
   
-  
-  
   onSubmit() {
     if (this.formCadastro.valid) {
       const formValue = this.formCadastro.value;
@@ -161,7 +159,7 @@ export class ModalCadastrarProfessorComponent implements OnInit {
       };
       
       const request = professor.id ? this.professorService.atualizar(professor.id, professor) : this.professorService.inserir(professor);
-
+ 
       request.subscribe({
         next: () => {
           this.toastr.success('Professor cadastrado com sucesso!');

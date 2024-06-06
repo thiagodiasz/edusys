@@ -10,26 +10,36 @@ namespace edusys.Api.Services
         private readonly IBaseRepository _baseRepository;
         private readonly IDisciplinaRepository _disciplinaRepository;
         private readonly ICursoRepository _cursoRepository;
+        private readonly IProfessorRepository _professorRepository;
+        private readonly IEnderecoRepository _enderecoRepository;
+        private readonly IEstadoRepository _estadoRepository;
 
-        public DisciplinaService(IBaseRepository baseRepository, IDisciplinaRepository disciplinaRepository, ICursoRepository cursoRepository)
+        public DisciplinaService(IBaseRepository baseRepository, IDisciplinaRepository disciplinaRepository, ICursoRepository cursoRepository, IProfessorRepository professorRepository, IEnderecoRepository enderecoRepository, IEstadoRepository estadoRepository)
         {
             _baseRepository = baseRepository;
             _disciplinaRepository = disciplinaRepository;
             _cursoRepository = cursoRepository;
+            _professorRepository = professorRepository;
+            _enderecoRepository = enderecoRepository;
+            _estadoRepository = estadoRepository;
         }
 
         public async Task<Disciplina> Inserir(Disciplina model)
         {
             try
             {
-                if (model.Curso != null && model.Curso != null)
+                var professor = await _professorRepository.ObterPeloId(model.ProfessorId);
+                if (professor == null)
                 {
-                    if (model.CursoId == 0)
-                    {
-                        model.CursoId = model.CursoId;
-                    }
+                    throw new Exception("Professor não encontrado");
                 }
-                model.Curso = await _cursoRepository.ObterPeloId(model.CursoId);
+
+                var estado = await _estadoRepository.ObterPeloId(professor.Endereco.EstadoId);
+                if (estado == null)
+                {
+                    throw new Exception("Estado associado ao professor não encontrado");
+                }
+
                 _baseRepository.Add<Disciplina>(model);
                 if (await _baseRepository.SaveChangesAsync())
                 {

@@ -23,10 +23,60 @@ namespace edusys.Api.Entities
         {
             modelBuilder.Entity<Aluno>()
                  .HasOne(a => a.Endereco)
-                    .WithOne()
-                    .OnDelete(DeleteBehavior.Cascade);
+                 .WithMany()
+                 .HasForeignKey(a => a.EnderecoId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Professor>()
+                .HasOne(p => p.Endereco)
+                .WithMany()
+                .HasForeignKey(p => p.EnderecoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Endereco>()
+                .HasOne(e => e.Estado)
+                .WithMany()
+                .HasForeignKey(e => e.EstadoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Curso>()
-                 .HasMany(a => a.Disciplinas);
+               .HasMany(c => c.Disciplinas)
+                .WithMany();
+
+            modelBuilder.Entity<Disciplina>()
+                .HasOne(d => d.Professor)
+                .WithMany()
+                .HasForeignKey(d => d.ProfessorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Matricula>()
+                .HasOne(m => m.Aluno)
+                .WithMany()
+                .HasForeignKey(m => m.AlunoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Matricula>()
+                .HasOne(m => m.Curso)
+                .WithMany()
+                .HasForeignKey(m => m.CursoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Nota>()
+                .HasOne(n => n.Matricula)
+                .WithMany()
+                .HasForeignKey(n => n.MatriculaId)
+                .OnDelete(DeleteBehavior.Cascade);
+           
+
+            modelBuilder.Entity<Nota>()
+                .HasOne(n => n.Disciplina)
+                .WithMany()
+                .HasForeignKey(n => n.DisciplinaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Estado>()
+                .HasIndex(e => e.UF)
+                .IsUnique();
         }
     }
 }

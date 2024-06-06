@@ -1,5 +1,6 @@
 ﻿using edusys.Api.Entities;
 using edusys.Api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace edusys.Api.Repositories
 {
@@ -25,9 +26,13 @@ namespace edusys.Api.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Endereco> ObterPeloId(int EnderecoId)
+        public async Task<Endereco> ObterPeloId(int EnderecoId)
         {
-            throw new NotImplementedException();
+            var endereco = await _context.Endereco
+                         .AsNoTracking()                          
+                         .FirstOrDefaultAsync(a => a.Id == EnderecoId);
+
+            return endereco;
         }
 
         public Task<IEnumerable<Endereco>> ObterTodos()

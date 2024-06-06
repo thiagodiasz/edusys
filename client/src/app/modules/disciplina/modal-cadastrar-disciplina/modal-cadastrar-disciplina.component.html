@@ -1,9 +1,9 @@
-<h2 mat-dialog-title color="mat-primary">Cadastrar Curso</h2>
+<h2 mat-dialog-title color="mat-primary">Cadastrar Displina</h2>
 <mat-divider></mat-divider>
 <div mat-dialog-content>
   <form [formGroup]="formCadastro" (ngSubmit)="onSubmit()">
     <mat-form-field class="example-full-width">
-      <mat-label>Nome</mat-label>
+      <mat-label>Nome completo</mat-label>
       <input matInput formControlName="nome"  value="formCadastro.get('nome').value || ''" required/>
       <mat-error *ngIf="formCadastro.get('nome')?.hasError('required')" >
         Nome é obrigatório
@@ -11,18 +11,16 @@
     </mat-form-field>
 
     <mat-form-field class="example-full-width ml-2">
-      <mat-label>Disciplina</mat-label>
-      <mat-select formControlName="disciplinas" multiple [compareWith]="compareDisciplina">
-        <mat-option *ngFor="let disciplina of listaDisciplinas; trackBy: trackByDisciplina" [value]="disciplina">
-          {{ disciplina.nome }}
+      <mat-label>Professor</mat-label>
+      <mat-select formControlName="professorId" [value]="formCadastro.get('professorId')?.value || ''" required>
+        <mat-option *ngFor="let professor of listaProfessores" [value]="professor.id">
+          {{ professor.nome }}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="formCadastro.get('disciplinas')?.hasError('required')">
-        Disciplinas são obrigatórias
+      <mat-error *ngIf="formCadastro.get('professorId')?.hasError('required')">
+        Professor é obrigatório
       </mat-error>
     </mat-form-field>
-    
-    
     
   
 

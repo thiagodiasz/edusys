@@ -22,7 +22,6 @@ namespace edusys.Api.Repositories
         {
             var disciplina = await _context.Disciplina
                            .AsNoTracking()
-                            .Include(d => d.Curso)
                            .FirstOrDefaultAsync(a => a.Id == disciplinaId);
 
             return disciplina;
@@ -32,9 +31,6 @@ namespace edusys.Api.Repositories
         {
 
             IQueryable<Disciplina> consulta = _context.Disciplina.AsNoTracking();
-
-            consulta = consulta
-                 .Include(d => d.Curso);
 
             return await consulta.ToArrayAsync();
         }

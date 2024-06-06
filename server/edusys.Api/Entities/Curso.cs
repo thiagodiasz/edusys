@@ -10,5 +10,7 @@ namespace edusys.Api.Entities
         public int Id { get; set; }
         public string? Nome { get; set; }
         public virtual IList<Disciplina>? Disciplinas { get; set; }
+
+        
     }
 }

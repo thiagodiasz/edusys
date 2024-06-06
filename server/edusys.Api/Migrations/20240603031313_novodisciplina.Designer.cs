@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using edusys.Api.Entities;
@@ -11,9 +12,11 @@ using edusys.Api.Entities;
 namespace edusys.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240603031313_novodisciplina")]
+    partial class novodisciplina
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace edusys.Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("CursoDisciplina", b =>
-                {
-                    b.Property<int>("CursoId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DisciplinasId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("CursoId", "DisciplinasId");
-
-                    b.HasIndex("DisciplinasId");
-
-                    b.ToTable("CursoDisciplina");
-                });
 
             modelBuilder.Entity("edusys.Api.Entities.Aluno", b =>
                 {
@@ -59,7 +47,8 @@ namespace edusys.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId");
+                    b.HasIndex("EnderecoId")
+                        .IsUnique();
 
                     b.HasIndex("TelefoneId");
 
@@ -90,6 +79,9 @@ namespace edusys.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CursoId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Nome")
                         .HasColumnType("text");
 
@@ -98,7 +90,10 @@ namespace edusys.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfessorId");
+                    b.HasIndex("CursoId");
+
+                    b.HasIndex("ProfessorId")
+                        .IsUnique();
 
                     b.ToTable("Disciplina");
                 });
@@ -151,9 +146,6 @@ namespace edusys.Api.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UF")
-                        .IsUnique();
 
                     b.ToTable("Estado");
                 });
@@ -232,7 +224,8 @@ namespace edusys.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId");
+                    b.HasIndex("EnderecoId")
+                        .IsUnique();
 
                     b.HasIndex("TelefoneId");
 
@@ -260,26 +253,11 @@ namespace edusys.Api.Migrations
                     b.ToTable("Telefone");
                 });
 
-            modelBuilder.Entity("CursoDisciplina", b =>
-                {
-                    b.HasOne("edusys.Api.Entities.Curso", null)
-                        .WithMany()
-                        .HasForeignKey("CursoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("edusys.Api.Entities.Disciplina", null)
-                        .WithMany()
-                        .HasForeignKey("DisciplinasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("edusys.Api.Entities.Aluno", b =>
                 {
                     b.HasOne("edusys.Api.Entities.Endereco", "Endereco")
-                        .WithMany()
-                        .HasForeignKey("EnderecoId")
+                        .WithOne()
+                        .HasForeignKey("edusys.Api.Entities.Aluno", "EnderecoId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("edusys.Api.Entities.Telefone", "Telefone")
@@ -293,10 +271,14 @@ namespace edusys.Api.Migrations
 
             modelBuilder.Entity("edusys.Api.Entities.Disciplina", b =>
                 {
+                    b.HasOne("edusys.Api.Entities.Curso", null)
+                        .WithMany("Disciplinas")
+                        .HasForeignKey("CursoId");
+
                     b.HasOne("edusys.Api.Entities.Professor", "Professor")
-                        .WithMany()
-                        .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithOne()
+                        .HasForeignKey("edusys.Api.Entities.Disciplina", "ProfessorId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Professor");
@@ -307,7 +289,7 @@ namespace edusys.Api.Migrations
                     b.HasOne("edusys.Api.Entities.Estado", "Estado")
                         .WithMany()
                         .HasForeignKey("EstadoId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Estado");
@@ -317,13 +299,11 @@ namespace edusys.Api.Migrations
                 {
                     b.HasOne("edusys.Api.Entities.Aluno", "Aluno")
                         .WithMany()
-                        .HasForeignKey("AlunoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AlunoId");
 
                     b.HasOne("edusys.Api.Entities.Curso", "Curso")
                         .WithMany()
-                        .HasForeignKey("CursoId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("CursoId");
 
                     b.Navigation("Aluno");
 
@@ -335,7 +315,7 @@ namespace edusys.Api.Migrations
                     b.HasOne("edusys.Api.Entities.Disciplina", "Disciplina")
                         .WithMany()
                         .HasForeignKey("DisciplinaId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("edusys.Api.Entities.Matricula", "Matricula")
@@ -352,8 +332,8 @@ namespace edusys.Api.Migrations
             modelBuilder.Entity("edusys.Api.Entities.Professor", b =>
                 {
                     b.HasOne("edusys.Api.Entities.Endereco", "Endereco")
-                        .WithMany()
-                        .HasForeignKey("EnderecoId")
+                        .WithOne()
+                        .HasForeignKey("edusys.Api.Entities.Professor", "EnderecoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -364,6 +344,11 @@ namespace edusys.Api.Migrations
                     b.Navigation("Endereco");
 
                     b.Navigation("Telefone");
+                });
+
+            modelBuilder.Entity("edusys.Api.Entities.Curso", b =>
+                {
+                    b.Navigation("Disciplinas");
                 });
 #pragma warning restore 612, 618
         }

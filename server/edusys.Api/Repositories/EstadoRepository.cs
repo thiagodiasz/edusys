@@ -29,6 +29,8 @@ namespace edusys.Api.Repositories
         public async Task<Estado> ObterPeloId(int estadoId)
         {
             var estado = await _context.Estado
+                                         .AsNoTracking()
+
                                .FirstOrDefaultAsync(a => a.Id == estadoId);
 
             return estado;

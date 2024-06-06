@@ -22,8 +22,7 @@ export class ProfessorService extends BaseService{
      obterPorId(id: number): Observable<Professor> {
       return this.http.get<Professor>(`${this.url}/${id}`, super.ObterHeaderJson());
     }
-    inserir(professor: Professor): Observable<Professor> {
-      debugger
+    inserir(professor: Professor): Observable<Professor> {      
       return this.http.post<Professor>(`${this.url}/inserir`, professor, super.ObterHeaderJson());
     }
     atualizar(id: number, request: Professor): Observable<Professor> {

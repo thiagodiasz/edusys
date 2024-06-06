@@ -21,14 +21,14 @@ namespace edusys.Api.Services
         {
             try
             {
-                if (model.Disciplina != null && model.Disciplina.Curso != null)
-                {
-                    if (model.Disciplina.CursoId == 0)
-                    {
-                        model.Disciplina.CursoId = model.Disciplina.Curso.Id;
-                    }
-                }
-                model.Disciplina.Curso = await _cursoRepository.ObterPeloId(model.Disciplina.CursoId);
+                //if (model.Disciplina != null && model.Disciplina.Curso != null)
+                //{
+                //    if (model.Disciplina.CursoId == 0)
+                //    {
+                //        model.Disciplina.CursoId = model.Disciplina.Curso.Id;
+                //    }
+                //}
+                //model.Disciplina.Curso = await _cursoRepository.ObterPeloId(model.Disciplina.CursoId);
                 _baseRepository.Add<Nota>(model);
                 if (await _baseRepository.SaveChangesAsync())
                 {

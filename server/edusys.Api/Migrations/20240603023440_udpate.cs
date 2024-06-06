@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace edusys.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class atualizabanco : Migration
+    public partial class udpate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -164,7 +164,7 @@ namespace edusys.Api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Nome = table.Column<string>(type: "text", nullable: true),
                     ProfessorId = table.Column<int>(type: "integer", nullable: false),
-                    CursoId = table.Column<int>(type: "integer", nullable: false)
+                    CursoId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -173,8 +173,7 @@ namespace edusys.Api.Migrations
                         name: "FK_Disciplina_Curso_CursoId",
                         column: x => x.CursoId,
                         principalTable: "Curso",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Disciplina_Professor_ProfessorId",
                         column: x => x.ProfessorId,
@@ -259,7 +258,8 @@ namespace edusys.Api.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Professor_EnderecoId",
                 table: "Professor",
-                column: "EnderecoId");
+                column: "EnderecoId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Professor_TelefoneId",

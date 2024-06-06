@@ -1,4 +1,5 @@
 ﻿using edusys.Api.Entities;
+using edusys.Api.Repositories;
 using edusys.Api.Repositories.Interfaces;
 using edusys.Api.Services.Interfaces;
 
@@ -8,19 +9,32 @@ namespace edusys.Api.Services
     {
         private readonly IBaseRepository _baseRepository;
         private readonly ICursoRepository _cursoRepository;
+        private IDisciplinaRepository _disciplinaRepository;
 
-        public CursoService(IBaseRepository baseRepository, ICursoRepository cursoRepository)
+
+        public CursoService(IBaseRepository baseRepository, ICursoRepository cursoRepository, IDisciplinaRepository disciplinaRepository)
         {
             _baseRepository = baseRepository;
             _cursoRepository = cursoRepository;
-        }     
+            _disciplinaRepository = disciplinaRepository;
+        }
 
         public async Task<Curso> Inserir(Curso model)
         {
             try
             {
+                var cursoExistente = await _cursoRepository.ObterPeloId(model.Id);
+                if (cursoExistente != null)
+                {
+                    throw new Exception("Já existe um curso com esse ID");
+                }
+
+                
                 _baseRepository.Add<Curso>(model);
-                if(await _baseRepository.SaveChangesAsync())
+
+               
+
+                if (await _baseRepository.SaveChangesAsync())
                 {
                     return await _cursoRepository.ObterPeloId(model.Id);
                 }
@@ -31,6 +45,10 @@ namespace edusys.Api.Services
                 throw new Exception(ex.Message);
             }
         }
+
+
+
+
         public async Task<Curso> Atualizar(int cursoId, Curso model)
         {
             try

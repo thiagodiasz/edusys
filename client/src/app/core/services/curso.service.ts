@@ -14,20 +14,20 @@ export class CursoService extends BaseService{
     super()
   }
 
-  obterTodos(): Observable<Curso[]> {
-    return this.http.get<Curso[]>(this.url, super.ObterHeaderJson());
-  }
-
-  obterPorId(id: string): Observable<Curso> {
-    return this.http.get<Curso>(`${this.url}/${id}`);
-  }
-  inserir(request: Curso):void {
-    this.http.post(this.url + '/inserir', request);
-  }
-  atualizar(curso: Curso): Observable<Curso> {
-    return this.http.put<Curso>(this.url + '/atualizar', curso);
-  }
-  excluir(id: number): Observable<Curso> {
-    return this.http.delete<Curso>(this.url + '/excluir?id=' + id);
-  }
+ 
+  obterTodos(): Observable<Curso[]>{
+    return this.http.get<Curso[]>(this.url, super.ObterHeaderJson())
+ }
+ obterPorId(id: number): Observable<Curso> {
+  return this.http.get<Curso>(`${this.url}/${id}`, super.ObterHeaderJson());
+}
+inserir(curso: Curso): Observable<Curso> {      
+  return this.http.post<Curso>(`${this.url}/inserir`, curso, super.ObterHeaderJson());
+}
+atualizar(id: number, request: Curso): Observable<Curso> {
+  return this.http.put<Curso>(`${this.url}/atualizar/${id}`, request, super.ObterHeaderJson());
+}
+excluir(id: number): Observable<Curso> {
+  return this.http.delete<Curso>(this.url + '/excluir/' + id, super.ObterHeaderJson());
+}
 }

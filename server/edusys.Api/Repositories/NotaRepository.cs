@@ -23,7 +23,6 @@ namespace edusys.Api.Repositories
             var nota = await _context.Nota
                            .AsNoTracking()
                             .Include(d => d.Disciplina)
-                                .ThenInclude(c => c.Curso)
                            .FirstOrDefaultAsync(a => a.Id == notaId);
 
             return nota;
@@ -35,8 +34,7 @@ namespace edusys.Api.Repositories
             IQueryable<Nota> consulta = _context.Nota.AsNoTracking();
 
             consulta = consulta
-                 .Include(d => d.Disciplina)
-                 .ThenInclude((c => c.Curso));
+                 .Include(d => d.Disciplina);
             
             return await consulta.ToArrayAsync();
         }

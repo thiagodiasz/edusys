@@ -9,26 +9,35 @@ namespace edusys.Api.Services
         private readonly IBaseRepository _baseRepository;
         private readonly IProfessorRepository _professorRepository;
         private readonly IEstadoRepository _estadoRepository;
+        private readonly IEnderecoRepository _enderecoRepository;
 
-        public ProfessorService(IBaseRepository baseRepository, IProfessorRepository professorRepository, IEstadoRepository estadoRepository)
+        public ProfessorService(IBaseRepository baseRepository, IProfessorRepository professorRepository, IEstadoRepository estadoRepository, IEnderecoRepository enderecoRepository)
         {
             _baseRepository = baseRepository;
             _professorRepository = professorRepository;
             _estadoRepository = estadoRepository;
+            _enderecoRepository = enderecoRepository;
         }
 
         public async Task<Professor> Inserir(Professor model)
         {
             try
             {
-                if (model.Endereco != null && model.Endereco.Estado != null)
+                var estadoExistente = await _estadoRepository.ObterPeloId(model.Endereco.EstadoId);
+
+                if (estadoExistente == null)
                 {
-                    if (model.Endereco.EstadoId == 0)
-                    {
-                        model.Endereco.EstadoId = model.Endereco.Estado.Id;
-                    }
+                    throw new Exception("Estado não encontrado.");
                 }
-                model.Endereco.Estado = await _estadoRepository.ObterPeloId(model.Endereco.EstadoId);
+
+                var enderecoExistente = await _enderecoRepository.ObterPeloId(model.EnderecoId);
+
+
+                if (enderecoExistente != null)
+                {
+                    model.Endereco = enderecoExistente;
+                }
+
                 _baseRepository.Add<Professor>(model);
                 if (await _baseRepository.SaveChangesAsync())
                 {

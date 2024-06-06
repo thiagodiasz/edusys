@@ -12,8 +12,8 @@ using edusys.Api.Entities;
 namespace edusys.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240601184709_atualizabanco")]
-    partial class atualizabanco
+    [Migration("20240606033421_testen")]
+    partial class testen
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace edusys.Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("CursoDisciplina", b =>
+                {
+                    b.Property<int>("CursoId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("DisciplinasId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CursoId", "DisciplinasId");
+
+                    b.HasIndex("DisciplinasId");
+
+                    b.ToTable("CursoDisciplina");
+                });
 
             modelBuilder.Entity("edusys.Api.Entities.Aluno", b =>
                 {
@@ -47,8 +62,7 @@ namespace edusys.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId")
-                        .IsUnique();
+                    b.HasIndex("EnderecoId");
 
                     b.HasIndex("TelefoneId");
 
@@ -79,9 +93,6 @@ namespace edusys.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CursoId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Nome")
                         .HasColumnType("text");
 
@@ -89,8 +100,6 @@ namespace edusys.Api.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CursoId");
 
                     b.HasIndex("ProfessorId");
 
@@ -145,6 +154,9 @@ namespace edusys.Api.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UF")
+                        .IsUnique();
 
                     b.ToTable("Estado");
                 });
@@ -251,11 +263,26 @@ namespace edusys.Api.Migrations
                     b.ToTable("Telefone");
                 });
 
+            modelBuilder.Entity("CursoDisciplina", b =>
+                {
+                    b.HasOne("edusys.Api.Entities.Curso", null)
+                        .WithMany()
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("edusys.Api.Entities.Disciplina", null)
+                        .WithMany()
+                        .HasForeignKey("DisciplinasId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("edusys.Api.Entities.Aluno", b =>
                 {
                     b.HasOne("edusys.Api.Entities.Endereco", "Endereco")
-                        .WithOne()
-                        .HasForeignKey("edusys.Api.Entities.Aluno", "EnderecoId")
+                        .WithMany()
+                        .HasForeignKey("EnderecoId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("edusys.Api.Entities.Telefone", "Telefone")
@@ -269,19 +296,11 @@ namespace edusys.Api.Migrations
 
             modelBuilder.Entity("edusys.Api.Entities.Disciplina", b =>
                 {
-                    b.HasOne("edusys.Api.Entities.Curso", "Curso")
-                        .WithMany("Disciplinas")
-                        .HasForeignKey("CursoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("edusys.Api.Entities.Professor", "Professor")
                         .WithMany()
                         .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Curso");
 
                     b.Navigation("Professor");
                 });
@@ -291,7 +310,7 @@ namespace edusys.Api.Migrations
                     b.HasOne("edusys.Api.Entities.Estado", "Estado")
                         .WithMany()
                         .HasForeignKey("EstadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Estado");
@@ -301,11 +320,13 @@ namespace edusys.Api.Migrations
                 {
                     b.HasOne("edusys.Api.Entities.Aluno", "Aluno")
                         .WithMany()
-                        .HasForeignKey("AlunoId");
+                        .HasForeignKey("AlunoId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("edusys.Api.Entities.Curso", "Curso")
                         .WithMany()
-                        .HasForeignKey("CursoId");
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Aluno");
 
@@ -317,7 +338,7 @@ namespace edusys.Api.Migrations
                     b.HasOne("edusys.Api.Entities.Disciplina", "Disciplina")
                         .WithMany()
                         .HasForeignKey("DisciplinaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("edusys.Api.Entities.Matricula", "Matricula")
@@ -346,11 +367,6 @@ namespace edusys.Api.Migrations
                     b.Navigation("Endereco");
 
                     b.Navigation("Telefone");
-                });
-
-            modelBuilder.Entity("edusys.Api.Entities.Curso", b =>
-                {
-                    b.Navigation("Disciplinas");
                 });
 #pragma warning restore 612, 618
         }

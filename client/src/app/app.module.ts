@@ -22,12 +22,13 @@ import { ListaAlunoComponent } from './modules/aluno/lista-aluno/lista-aluno.com
 import { MatTableModule } from '@angular/material/table';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogModule, MatDialogTitle } from '@angular/material/dialog';
 
-import { ListaCursoComponent } from './modules/curso/lista-curso/lista-curso.component';
 import { ModalModule, BsModalRef } from 'ngx-bootstrap/modal';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule, provideToastr } from 'ngx-toastr';
 import { ListaProfessorComponent } from './modules/professor/lista-professor/lista-professor.component';
+import { ListaDisciplinaComponent } from './modules/disciplina/lista-disciplina/lista-disciplina.component';
+import { ListaCursoComponent } from './modules/curso/lista-curso/lista-curso.component';
 
 @NgModule({
   declarations: [
@@ -36,8 +37,10 @@ import { ListaProfessorComponent } from './modules/professor/lista-professor/lis
     HeaderComponent,
     SidenavComponent,
     ListaAlunoComponent,
-    ListaCursoComponent,
-    ListaProfessorComponent   
+    ListaProfessorComponent,
+    ListaDisciplinaComponent,
+    ListaCursoComponent 
+    
   ],
   exports:[MatTableModule, MatDialogModule],
   imports: [

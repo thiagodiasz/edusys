@@ -1,4 +1,4 @@
-<h2 mat-dialog-title color="mat-primary">Cadastrar Aluno</h2>
+<h2 mat-dialog-title color="mat-primary">Cadastrar Professor</h2>
 <mat-divider></mat-divider>
 <div mat-dialog-content>
   <form [formGroup]="formCadastro" (ngSubmit)="onSubmit()">
@@ -40,7 +40,7 @@
         <mat-label>Complemento</mat-label>
         <input matInput formControlName="complemento" [value]="formCadastro.get('endereco.complemento')?.value || ''" required />
         <mat-error
-          *ngIf="formCadastro.get('endereco.Complemento')?.hasError('required')"
+          *ngIf="formCadastro.get('endereco.complemento')?.hasError('required')"
         >
           Complemento é obrigatório
         </mat-error>
