@@ -122,5 +122,105 @@ namespace edusys.Api.Controllers
                 return BadRequest("Ocorreu um erro ao recuperar Curso");
             }
         }
+
+       
+        [HttpPost("curso/inserirCursoDisciplina")]
+        public async Task<IActionResult> InserirCursoDisciplina([FromBody] CursoDisciplina model)
+        {
+            try
+            {
+                var cursos = await _cursoService.InserirCursoDisciplina(model);
+                if (cursos == null) return NotFound("Nenhum curso encontrado");
+
+                return Ok(cursos);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ocorreu um erro ao recuperar Curso");
+            }
+        }
+        /// <summary>
+        /// Editar um Curso.
+        /// <param name="id">int</param>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("curso/atualizarCursoDisciplina/{id}")]
+        public async Task<IActionResult> AtualizarCursoDisciplina(int id, CursoDisciplina model)
+        {
+            try
+            {
+                var curso = await _cursoService.AtualizarCursoDisciplina(id, model);
+
+                if (curso == null) return BadRequest("Erro ao atualizar curso");
+
+                return Ok(new { message = "Curso cadastrado com sucesso", curso = curso });
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// Excluir um Curso por Id.
+        /// </summary>
+        /// <param name="id">int</param>
+        /// <returns></returns>
+        [HttpDelete("curso/excluirCursoDisciplina/{id}")]
+        public async Task<IActionResult> ExcluirCursoDisciplina(int id)
+        {
+            try
+            {
+                return await _cursoService.ExcluirCursoDisciplina(id) ?
+                Ok(new { message = "Curso excluido com sucesso" }) :
+                    BadRequest("Não foi possível excluir o curso");
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// Obter Usuário por Id.
+        /// </summary>
+        /// <param name="id">int</param>
+        /// <returns></returns>
+        [HttpGet("curso/obterCursoDisciplina{id}")]
+        public async Task<ActionResult> ObterCursoDisciplinaPorId(int id)
+        {
+            try
+            {
+                var cursos = await _cursoService.ObterCursoDisciplinaPeloId(id);
+                if (cursos == null) return NotFound("Nenhum curso encontrado");
+
+                return Ok(cursos);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Ocorreu um erro ao recuperar Curso");
+            }
+        }
+
+        [HttpGet("curso/obterTodosCursoDisciplina")]
+        public async Task<IActionResult> ObterTodosCursoDisciplina()
+        {
+            try
+            {
+                var cursos = await _cursoService.ObterTodosCursoDisciplina();
+                if (cursos == null) return NotFound("Nenhum curso encontrado");
+
+                return Ok(cursos);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest("Ocorreu um erro ao salvar Curso"); ;
+            }
+        }
     }
 }

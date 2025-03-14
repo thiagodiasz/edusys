@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="col-md-12">
+    <mat-card class="shadow">
+      <mat-card-header class="mb-3">
+        <mat-card-title-group>
+          <mat-card-title> Lista de Notas </mat-card-title>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="abrirModalCadastrar()"
+          >
+            <mat-icon class="supervisor_account">add</mat-icon>
+            Cadastrar
+          </button>
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+
+      <mat-card-content class="pt-3">
+        <div class="row">
+          <div class="col-md-12">
+            <table mat-table [dataSource]="listaNotas" class="mat-elevation-z2">
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef>No.</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.position }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="aluno">
+                <th mat-header-cell *matHeaderCellDef>Aluno</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.matricula.aluno.nome }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="disciplina">
+                <th mat-header-cell *matHeaderCellDef>Disciplina</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.disciplina.nome }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="nota">
+                <th mat-header-cell *matHeaderCellDef>Nota</th>
+                <td mat-cell *matCellDef="let element">{{ element.valor }}</td>
+              </ng-container>
+              <ng-container matColumnDef="acoes">
+                <th mat-header-cell *matHeaderCellDef>Ações</th>
+                <td mat-cell *matCellDef="let element">
+                  <button mat-icon-button (click)="editarNota(element)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="excluirNota(element)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

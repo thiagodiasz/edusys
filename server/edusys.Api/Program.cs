@@ -31,6 +31,7 @@ builder.Services.AddScoped<INotaRepository, NotaRepository>();
 builder.Services.AddScoped<IMatriculaRepository, MatriculaRepository>();
 builder.Services.AddScoped<IEstadoRepository, EstadoRepository>();
 builder.Services.AddScoped<IBaseRepository, BaseRepository>();
+builder.Services.AddScoped<IUniversidadeRepository, UniversidadeRepository>();
 
 
 
@@ -42,6 +43,7 @@ builder.Services.AddScoped<IProfessorService, ProfessorService>();
 builder.Services.AddScoped<IDisciplinaService, DisciplinaService>();
 builder.Services.AddScoped<INotaService, NotaService>();
 builder.Services.AddScoped<IMatriculaService, MatriculaService>();
+builder.Services.AddScoped<IUniversidadeService, UniversidadeService>();
 
 
 var app = builder.Build();

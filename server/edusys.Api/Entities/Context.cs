@@ -8,6 +8,8 @@ namespace edusys.Api.Entities
         public Context(DbContextOptions<Context> options) : base(options)
         {
         }
+        public DbSet<Universidade> Universidade { get; set; }
+
         public DbSet<Aluno> Aluno { get; set; }
         public DbSet<Curso> Curso { get; set; }
         public DbSet<Disciplina> Disciplina { get; set; }
@@ -17,11 +19,18 @@ namespace edusys.Api.Entities
         public DbSet<Nota> Nota { get; set; }
         public DbSet<Professor> Professor { get; set; }
         public DbSet<Telefone> Telefone { get; set; }
+        public DbSet<CursoDisciplina> CursoDisciplina { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Aluno>()
+                 .HasOne(a => a.Endereco)
+                 .WithMany()
+                 .HasForeignKey(a => a.EnderecoId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Universidade>()
                  .HasOne(a => a.Endereco)
                  .WithMany()
                  .HasForeignKey(a => a.EnderecoId)
@@ -38,10 +47,6 @@ namespace edusys.Api.Entities
                 .WithMany()
                 .HasForeignKey(e => e.EstadoId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Curso>()
-               .HasMany(c => c.Disciplinas)
-                .WithMany();
 
             modelBuilder.Entity<Disciplina>()
                 .HasOne(d => d.Professor)
@@ -77,6 +82,18 @@ namespace edusys.Api.Entities
             modelBuilder.Entity<Estado>()
                 .HasIndex(e => e.UF)
                 .IsUnique();
+
+            modelBuilder.Entity<CursoDisciplina>()
+               .HasOne(p => p.Curso)
+               .WithMany()
+               .HasForeignKey(p => p.CursoId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CursoDisciplina>()
+               .HasOne(p => p.Disciplina)
+               .WithMany()
+               .HasForeignKey(p => p.DisciplinaId)
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

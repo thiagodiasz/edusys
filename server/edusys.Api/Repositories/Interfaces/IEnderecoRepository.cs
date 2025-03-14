@@ -7,7 +7,7 @@ namespace edusys.Api.Repositories.Interfaces
         Task<Professor> Inserir(Endereco Endereco);
         Task<Professor> Editar(Endereco Endereco);
         void Excluir(Endereco Endereco);
-        Task<Endereco> ObterPeloId(int EnderecoId);
+        Task<Endereco> ObterPeloId(int enderecoId);
         Task<IEnumerable<Endereco>> ObterTodos();
         Task<bool> SaveAllAsync();
     }

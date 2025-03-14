@@ -4,6 +4,7 @@ import { CursoService } from '../../../core/services/curso.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { ModalCadastrarCursoComponent } from '../modal-cadastrar-curso/modal-cadastrar-curso.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lista-curso',
@@ -19,7 +20,8 @@ export class ListaCursoComponent implements OnInit {
     private readonly cursoService: CursoService,
     public modalCadastrar: MatDialog,
     public modalEditar: MatDialog,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -27,14 +29,10 @@ export class ListaCursoComponent implements OnInit {
   }
 
   getCursos(): void {
-
-    this.cursoService
-      .obterTodos()
-      .subscribe(response => {
-        console.log(response)
-          this.listaCursos = response
-      })
-
+    this.cursoService.obterTodos().subscribe((response) => {
+      console.log(response);
+      this.listaCursos = response;
+    });
   }
 
   editarCurso(curso: Curso): void {
@@ -66,4 +64,8 @@ export class ListaCursoComponent implements OnInit {
       this.getCursos();
     });
   }
+  abrirListaCursoDisciplina() {
+    this.router.navigate(['/cursos/disciplinas']);
+
+ }
 }

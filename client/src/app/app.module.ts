@@ -29,6 +29,11 @@ import { ToastrModule, provideToastr } from 'ngx-toastr';
 import { ListaProfessorComponent } from './modules/professor/lista-professor/lista-professor.component';
 import { ListaDisciplinaComponent } from './modules/disciplina/lista-disciplina/lista-disciplina.component';
 import { ListaCursoComponent } from './modules/curso/lista-curso/lista-curso.component';
+import { ListaCursoDisciplinaComponent } from './modules/curso/curso-disciplina/lista-curso-disciplina/lista-curso-disciplina.component';
+import { ListaMatriculaComponent } from './modules/matricula/lista-matricula/lista-matricula.component';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { ListaNotaComponent } from './modules/nota/lista-nota/lista-nota.component';
+import { ListaUniversidadeComponent } from './modules/universidade/lista-universidade/lista-universidade.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +44,11 @@ import { ListaCursoComponent } from './modules/curso/lista-curso/lista-curso.com
     ListaAlunoComponent,
     ListaProfessorComponent,
     ListaDisciplinaComponent,
-    ListaCursoComponent 
+    ListaCursoComponent, 
+    ListaCursoDisciplinaComponent,
+    ListaMatriculaComponent,
+    ListaNotaComponent,
+    ListaUniversidadeComponent
     
   ],
   exports:[MatTableModule, MatDialogModule],
@@ -69,6 +78,8 @@ import { ListaCursoComponent } from './modules/curso/lista-curso/lista-curso.com
      MatFormFieldModule,
      FormsModule,
      ToastrModule.forRoot(),
+     MatNativeDateModule,
+
      
     
   ],
@@ -78,6 +89,7 @@ import { ListaCursoComponent } from './modules/curso/lista-curso/lista-curso.com
     BsModalRef,
     provideAnimationsAsync(),
     provideToastr(),
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     //{provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
   ]
 })

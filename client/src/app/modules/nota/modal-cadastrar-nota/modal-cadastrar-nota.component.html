@@ -1,0 +1,117 @@
+<!-- <h2 mat-dialog-title color="mat-primary" *ngIf="!nota">Lançar Nota</h2>
+<h2 mat-dialog-title color="mat-primary" *ngIf="nota">Editar Matrícula</h2>
+
+<mat-divider></mat-divider>
+
+<div mat-dialog-content>
+  <form [formGroup]="formCadastro" (ngSubmit)="onSubmit()" class="form-grid">
+    <div class="form-column">
+      <mat-form-field class="example-full-width">
+        <mat-label>Matrícula do Aluno</mat-label>
+        <mat-select formControlName="matricula" required>
+          <mat-option *ngFor="let matricula of listaMatriculas" [value]="matricula">
+            {{ matricula.aluno.nome }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formCadastro.get('matricula')?.hasError('required')">
+          Matrícula é obrigatória
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-column">
+      <mat-form-field class="example-full-width">
+        <mat-label>Disciplina</mat-label>
+        <mat-select formControlName="disciplina" required>
+          <mat-option *ngFor="let disciplina of listaDisciplinas" [value]="disciplina">
+            {{ disciplina.nome }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formCadastro.get('disciplina')?.hasError('required')">
+          Disciplina é obrigatória
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-column">
+      <mat-form-field class="example-full-width">
+        <mat-label>Nota</mat-label>
+        <input matInput formControlName="valor" required />
+        <mat-error *ngIf="formCadastro.get('valor')?.hasError('required')">
+          Valor é obrigatório
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="formCadastro.invalid">
+    Salvar
+  </button>
+</mat-dialog-actions> -->
+
+<h2 mat-dialog-title color="mat-primary" *ngIf="!nota">Lançar Nota</h2>
+<h2 mat-dialog-title color="mat-primary" *ngIf="nota">Editar Nota</h2>
+
+<mat-divider></mat-divider>
+<div mat-dialog-content>
+  <form [formGroup]="formCadastro" (ngSubmit)="onSubmit()">
+    <mat-form-field class="example-full-width ml-2">
+      <mat-label>Curso</mat-label>
+      <mat-select formControlName="matricula" [compareWith]="compareMatricula">
+        <mat-option
+          *ngFor="let matricula of listaMatriculas; trackBy: trackByMatricula"
+          [value]="matricula"
+        >
+          {{ matricula.aluno.nome }}-{{ matricula.numero }}
+
+          
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formCadastro.get('curso')?.hasError('required')">
+        Aluno é obrigatório
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width ml-2">
+      <mat-label>Disciplina</mat-label>
+      <mat-select
+        formControlName="disciplina"
+        [compareWith]="compareDisciplina"
+      >
+        <mat-option
+          *ngFor="
+            let disciplina of listaDisciplinas;
+            trackBy: trackByDisciplina
+          "
+          [value]="disciplina"
+        >
+          {{ disciplina.nome }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formCadastro.get('disciplina')?.hasError('required')">
+        Disciplinas são obrigatórias
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width ml-2">
+      <mat-label>Nota</mat-label>
+      <input matInput formControlName="valor" required />
+      <mat-error *ngIf="formCadastro.get('valor')?.hasError('required')">
+        Valor é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-dialog-actions>
+      <button mat-raised-button mat-dialog-close>Cancelar</button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="formCadastro.invalid"
+      >
+        Salvar
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>
+<mat-divider></mat-divider>

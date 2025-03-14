@@ -24,6 +24,7 @@ import { AlunoService } from '../../../core/services/aluno.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-modal-cadastrar-aluno',
@@ -43,6 +44,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     CommonModule,
     MatSelectModule,
+    MatDatepickerModule
   ],
 })
 export class ModalCadastrarAlunoComponent implements OnInit {
@@ -108,6 +110,7 @@ export class ModalCadastrarAlunoComponent implements OnInit {
         numero: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
         ddd: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
       }),
+      dataNascimento: ['', Validators.required]
     });
   }
 
@@ -136,7 +139,8 @@ export class ModalCadastrarAlunoComponent implements OnInit {
         telefone: {
           ddd: this.aluno.telefone.ddd || '',
           numero: this.aluno.telefone.numero || ''
-        }
+        },
+        dataNascimento: this.aluno.dataNascimento || ''
       });
     }
   }
@@ -158,6 +162,8 @@ export class ModalCadastrarAlunoComponent implements OnInit {
         telefone: formValue.telefone,
         enderecoId: this.aluno ? this.aluno.enderecoId : 0,
         telefoneId: this.aluno ? this.aluno.telefoneId : 0,
+        dataNascimento: this.aluno ? this.aluno.dataNascimento : formValue.dataNascimento,
+
       };
       
       const request = aluno.id ? this.alunoService.atualizar(aluno.id, aluno) : this.alunoService.inserir(aluno);

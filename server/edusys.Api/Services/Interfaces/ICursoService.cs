@@ -10,5 +10,13 @@ namespace edusys.Api.Services.Interfaces
         Task<bool> Excluir(int cursoId);
         Task<Curso> ObterPeloId(int cursoId);
         Task<Curso[]> ObterTodos();
+        Task<CursoDisciplina> InserirCursoDisciplina(CursoDisciplina model);
+        Task<CursoDisciplina> AtualizarCursoDisciplina(int cursoId, CursoDisciplina model);
+        Task<bool> ExcluirCursoDisciplina(int cursoId);
+        Task<CursoDisciplina> ObterCursoDisciplinaPeloId(int cursoId);
+        Task<CursoDisciplina[]> ObterTodosCursoDisciplina();
+
+
+
     }
 }

@@ -8,6 +8,12 @@ namespace edusys.Api.Controllers
     [ApiController]
     public class MatriculaController : Controller
     {
+        public class InserirAlunoComMatriculaRequest
+        {
+            public int AlunoId {  get; set; }
+            public int CursoId { get; set; }
+        }
+
         private readonly IMatriculaService _matriculaService;
         public MatriculaController(IMatriculaService matriculaService)
         {
@@ -34,19 +40,18 @@ namespace edusys.Api.Controllers
                 return BadRequest("Ocorreu um erro ao salvar Matricula"); ;
             }
         }
-
+      
 
         [HttpPost("matricula/inserir")]
-        public async Task<IActionResult> Inserir([FromBody] Matricula model)
+        public async Task<IActionResult> Inserir([FromBody] InserirAlunoComMatriculaRequest request)
         {
             try
             {
 
-                var matricula = await _matriculaService.Inserir(model);
+                await _matriculaService.Inserir(request.AlunoId, request.CursoId);
+                var matriculas = await _matriculaService.ObterUltimaMatriculaInserida();
 
-                if (matricula == null) return BadRequest("Erro ao inserir matricula");
-
-                return Ok(new { message = "Matricula cadastrado com sucesso", matricula = matricula });
+                return Ok(matriculas);
             }
             catch (Exception)
             {

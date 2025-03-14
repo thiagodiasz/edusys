@@ -44,10 +44,7 @@ namespace edusys.Api.Services
             {
                 throw new Exception(ex.Message);
             }
-        }
-
-
-
+        }        
 
         public async Task<Curso> Atualizar(int cursoId, Curso model)
         {
@@ -121,5 +118,149 @@ namespace edusys.Api.Services
                 throw new Exception(ex.Message);
             }            
         }
+
+        #region CursoDisciplina
+        public async Task<CursoDisciplina> InserirCursoDisciplina(CursoDisciplina model)
+        {
+            try
+            {
+                var cursoExistente = await _cursoRepository.ObterPeloId(model.CursoId);
+                if (cursoExistente == null)
+                {
+                    throw new Exception("Curso não encontrado.");
+                }
+
+                var disciplinaExistente = await _disciplinaRepository.ObterPeloId(model.DisciplinaId);
+                if (disciplinaExistente == null)
+                {
+                    throw new Exception("Disciplina não encontrada.");
+                }
+
+                // Apenas definindo as chaves estrangeiras
+                model.Curso = null;
+                model.Disciplina = null;
+
+                _baseRepository.Add<CursoDisciplina>(model);
+
+                if (await _baseRepository.SaveChangesAsync())
+                {
+                    return await _cursoRepository.ObterCursoDisplinaPeloId(model.Id);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        //public async Task<CursoDisciplina> InserirCursoDisciplina(CursoDisciplina model)
+        //{
+        //    try
+        //    {
+        //        var cursoExistente = await _cursoRepository.ObterPeloId(model.CursoId);
+        //        if (cursoExistente != null)
+        //        {
+        //           model.Curso = cursoExistente;
+        //        }
+
+        //        var disciplina = await _disciplinaRepository.ObterPeloId(model.DisciplinaId);
+        //        if (disciplina != null)
+        //        {
+        //           model.Disciplina = disciplina;
+        //        }
+
+        //        //model.Curso = cursoExistente;
+        //        //model.Disciplina = model.Disciplina;
+
+        //        _baseRepository.Add<CursoDisciplina>(model);
+
+
+
+        //        if (await _baseRepository.SaveChangesAsync())
+        //        {
+        //            return await _cursoRepository.ObterCursoDisplinaPeloId(model.Id);
+        //        }
+        //        return null;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //}
+
+        public async Task<CursoDisciplina> AtualizarCursoDisciplina(int cursoId, CursoDisciplina model)
+        {
+            try
+            {
+                var curso = await _cursoRepository.ObterPeloId(cursoId);
+                if (curso == null) return null;
+
+                model.Id = curso.Id;
+
+                _baseRepository.Update(model);
+
+                if (await _baseRepository.SaveChangesAsync())
+                {
+                    return await _cursoRepository.ObterCursoDisplinaPeloId(model.Id);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> ExcluirCursoDisciplina(int cursoId)
+        {
+            try
+            {
+
+                var curso = await _cursoRepository.ObterCursoDisplinaPeloId(cursoId);
+                if (curso == null) throw new Exception("Curso não encontrado");
+
+
+                _baseRepository.Delete<CursoDisciplina>(curso);
+                return await _baseRepository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<CursoDisciplina> ObterCursoDisciplinaPeloId(int cursoId)
+        {
+            try
+            {
+                var cursos = await _cursoRepository.ObterCursoDisplinaPeloId(cursoId);
+                if (cursos == null) return null;
+
+                return cursos;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<CursoDisciplina[]> ObterTodosCursoDisciplina()
+        {
+            try
+            {
+                var cursos = await _cursoRepository.ObterTodosCursoDisciplina();
+                if (cursos == null) return null;
+
+                return cursos;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+        }
+        #endregion
     }
 }

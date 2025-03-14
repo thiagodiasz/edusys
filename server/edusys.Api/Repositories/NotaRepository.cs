@@ -34,8 +34,13 @@ namespace edusys.Api.Repositories
             IQueryable<Nota> consulta = _context.Nota.AsNoTracking();
 
             consulta = consulta
-                 .Include(d => d.Disciplina);
-            
+                 .Include(d => d.Disciplina)
+                 .Include(d => d.Matricula)
+                 .ThenInclude(e => e.Aluno)
+                 .Include(d => d.Matricula)
+                 .ThenInclude(e => e.Curso);
+            ;
+
             return await consulta.ToArrayAsync();
         }
     }

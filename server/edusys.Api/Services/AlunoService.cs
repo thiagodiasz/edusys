@@ -1,4 +1,5 @@
 ﻿using edusys.Api.Entities;
+using edusys.Api.Repositories;
 using edusys.Api.Repositories.Interfaces;
 using edusys.Api.Services.Interfaces;
 
@@ -9,26 +10,34 @@ namespace edusys.Api.Services
         private readonly IBaseRepository _baseRepository;
         private readonly IAlunoRepository _alunoRepository;
         private readonly IEstadoRepository _estadoRepository;
+        private readonly IEnderecoRepository _enderecoRepository;
 
-        public AlunoService(IBaseRepository baseRepository, IAlunoRepository alunoRepository, IEstadoRepository estadoRepository)
+        public AlunoService(IBaseRepository baseRepository, IAlunoRepository alunoRepository, IEstadoRepository estadoRepository, IEnderecoRepository enderecoRepository)
         {
             _baseRepository = baseRepository;
             _alunoRepository = alunoRepository;
             _estadoRepository = estadoRepository;
+            _enderecoRepository = enderecoRepository;
         }
 
         public async Task<Aluno> Inserir(Aluno model)
         {
             try
             {
-                if (model.Endereco != null && model.Endereco.Estado != null)
+                var estadoExistente = await _estadoRepository.ObterPeloId(model.Endereco.EstadoId);
+
+                if (estadoExistente == null)
                 {
-                    if (model.Endereco.EstadoId == 0)
-                    {
-                        model.Endereco.EstadoId = model.Endereco.Estado.Id;
-                    }
+                    throw new Exception("Estado não encontrado.");
                 }
-                model.Endereco.Estado = await _estadoRepository.ObterPeloId(model.Endereco.EstadoId);
+
+                var enderecoExistente = await _enderecoRepository.ObterPeloId(model.EnderecoId);
+
+
+                if (enderecoExistente != null)
+                {
+                    model.Endereco = enderecoExistente;
+                }
                 _baseRepository.Add<Aluno>(model);
                 if(await _baseRepository.SaveChangesAsync())
                 {

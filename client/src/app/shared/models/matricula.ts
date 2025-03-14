@@ -3,9 +3,15 @@ import { Curso } from "./curso";
 
 export interface Matricula {
     id: number;
-    matricula: string;
+    numero: string;
     cursoId: number;
     alunoId: number;
     curso: Curso;
     aluno: Aluno; 
 }
+
+export interface InserirAlunoComMatriculaRequest {
+    id: number;
+    alunoId: number;
+    cursoId: number;
+  }

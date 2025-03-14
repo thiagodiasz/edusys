@@ -11,6 +11,18 @@ namespace edusys.Api.Repositories
         {
             _context = context;
         }
+
+        public async Task<CursoDisciplina> ObterCursoDisplinaPeloId(int cursoId)
+        {
+            var curso = await _context.CursoDisciplina
+                .Include(e => e.Curso)
+                .Include(e => e.Disciplina)
+                             .AsNoTracking()
+                             .FirstOrDefaultAsync(a => a.Id == cursoId);
+
+            return curso;
+        }
+
         //public void Task<T> Inserir(Curso Curso)
         //{
         //    //Execute procecedure             
@@ -32,8 +44,17 @@ namespace edusys.Api.Repositories
 
             IQueryable<Curso> consulta = _context.Curso.AsNoTracking();
 
-            consulta = consulta.Include(e => e.Disciplinas).OrderBy(x => x.Id);
+            consulta = consulta.OrderBy(x => x.Id);
             return await consulta.ToArrayAsync();
-        }      
+        }
+
+        public async Task<CursoDisciplina[]> ObterTodosCursoDisciplina()
+        {
+            IQueryable<CursoDisciplina> consulta = _context.CursoDisciplina.AsNoTracking();
+
+            consulta = consulta.Include(e => e.Curso)
+                .Include(e => e.Disciplina).OrderBy(x => x.Id);
+            return await consulta.ToArrayAsync();
+        }
     }
 }

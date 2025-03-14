@@ -9,23 +9,6 @@
         Nome é obrigatório
       </mat-error>
     </mat-form-field>
-
-    <mat-form-field class="example-full-width ml-2">
-      <mat-label>Disciplina</mat-label>
-      <mat-select formControlName="disciplinas" multiple [compareWith]="compareDisciplina">
-        <mat-option *ngFor="let disciplina of listaDisciplinas; trackBy: trackByDisciplina" [value]="disciplina">
-          {{ disciplina.nome }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="formCadastro.get('disciplinas')?.hasError('required')">
-        Disciplinas são obrigatórias
-      </mat-error>
-    </mat-form-field>
-    
-    
-    
-  
-
     <mat-dialog-actions>
       <button mat-raised-button mat-dialog-close>Cancelar</button>
       <button

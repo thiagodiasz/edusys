@@ -1,15 +1,20 @@
 import { Disciplina } from "./disciplina";
 import { Aluno } from "./aluno";
 import { Curso } from "./curso";
+import { Matricula } from "./matricula";
 
 export interface Nota {
     id: number;
     valor: number;
-    disciplinaId: number;
-    alunoId: number;
-    cursoId: number;
+    disciplinaId: number;   
     disciplina: Disciplina;
-    curso: Curso;
-    aluno: Aluno;    
+    matriculaId: number;
+    matricula : Matricula   
 }
 
+export interface InserirNotaRequest {
+    id: number;
+    valor: number;
+    matriculaId: number;
+    disciplinaId: number;
+  }

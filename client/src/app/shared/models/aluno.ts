@@ -9,5 +9,6 @@ export interface Aluno {
     endereco: Endereco;
     enderecoId: number;
     telefoneId: number;
-    telefone: Telefone;   
+    telefone: Telefone;
+    dataNascimento: Date   
 }

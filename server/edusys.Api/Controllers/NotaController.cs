@@ -37,7 +37,7 @@ namespace edusys.Api.Controllers
 
 
         [HttpPost("nota/inserir")]
-        public async Task<IActionResult> Inserir([FromBody] Nota model)
+        public async Task<IActionResult> Inserir([FromBody]Nota model)
         {
             try
             {

@@ -98,9 +98,7 @@ export class ModalCadastrarDisciplinaComponent implements OnInit {
       const disciplina: Disciplina = {
         id: this.disciplina ? this.disciplina.id : 0,
         nome: formValue.nome,
-        professorId: formValue.professorId,
-        cursoId: 0,
-        curso: undefined
+        professorId: formValue.professorId
       };
 
       const request = disciplina.id

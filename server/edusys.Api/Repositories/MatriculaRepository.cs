@@ -32,7 +32,9 @@ namespace edusys.Api.Repositories
 
             IQueryable<Matricula> consulta = _context.Matricula.AsNoTracking();
 
-            consulta = consulta.Include(e => e.Curso).OrderBy(x => x.Id);
+            consulta = consulta
+                .Include(e => e.Aluno)
+                .Include(e => e.Curso).OrderBy(x => x.Id);
             return await consulta.ToArrayAsync();
         }
     }

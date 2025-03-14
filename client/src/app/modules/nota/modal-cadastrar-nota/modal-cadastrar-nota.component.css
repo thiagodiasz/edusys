@@ -1,0 +1,14 @@
+/* .form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  
+  .form-column {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  } */

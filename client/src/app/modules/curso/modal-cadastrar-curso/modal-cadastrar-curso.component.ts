@@ -65,8 +65,7 @@ export class ModalCadastrarCursoComponent implements OnInit {
     private readonly disciplinaService: DisciplinaService
   ) {
     this.formCadastro = this.fb.group({
-      nome: ['', Validators.required],
-      disciplinas: [null, Validators.required]
+      nome: ['', Validators.required]
     });
   }
 
@@ -77,46 +76,34 @@ export class ModalCadastrarCursoComponent implements OnInit {
     this.formCadastro.valueChanges.subscribe((value) => {
       console.log('Formulário alterado:', value);
     });
-
   }
   preencherFormulario(): void {
     if (this.curso) {
-      const disciplinas = this.curso.disciplinas.map(x => ({
-        id: x.id,
-        nome: x.nome,
-        professorId: x.professorId,
-        professor: x.professor
-      }));
       this.formCadastro.patchValue({
-
+        id: this.curso.id,
         nome: this.curso.nome,
-        disciplinas: disciplinas
       });
-      console.log(this.formCadastro.value)
     }
   }
-   compareFn(v1: Disciplina, v2: Disciplina): boolean {
+  compareFn(v1: Disciplina, v2: Disciplina): boolean {
     return v1 && v2 ? v1.id === v2.id : v1 === v2;
-}
-recuperarDisciplinas(): void {
-  this.disciplinaService.obterTodos().subscribe((response) => {
-    this.listaDisciplinas = response;
+  }
+  recuperarDisciplinas(): void {
+    this.disciplinaService.obterTodos().subscribe((response) => {
+      this.listaDisciplinas = response;
 
-    this.preencherFormulario();
-  });
-}
+      this.preencherFormulario();
+    });
+  }
 
   onSubmit() {
-    debugger
     if (this.formCadastro.valid) {
       const formValue = this.formCadastro.value;
 
       const curso: Curso = {
         id: this.curso ? this.curso.id : 0,
         nome: formValue.nome,
-        disciplinas: formValue.disciplinas
       };
-console.log(curso)
 
       const request = curso.id
         ? this.cursoService.atualizar(curso.id, curso)
@@ -137,10 +124,12 @@ console.log(curso)
   }
 
   trackByDisciplina(index: number, disciplina: Disciplina): number {
-    return disciplina.id; 
+    return disciplina.id;
   }
 
   compareDisciplina(disciplina1: Disciplina, disciplina2: Disciplina) {
-    return disciplina1 && disciplina2 ? disciplina1.id === disciplina2.id : disciplina1 === disciplina2;
+    return disciplina1 && disciplina2
+      ? disciplina1.id === disciplina2.id
+      : disciplina1 === disciplina2;
   }
 }

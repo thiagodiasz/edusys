@@ -9,6 +9,13 @@
 <mat-sidenav-container class="example-container" autosize>
 	<mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()">
 		<mat-nav-list>
+      <mat-list-item routerLink="/universidades" class="parent">
+        <mat-icon class="school">school</mat-icon>
+				<span class="full-width" *ngIf="isExpanded || isShowing">
+          Universidades
+        </span>
+      </mat-list-item>
+
 			<mat-list-item routerLink="/alunos" class="parent">
         <mat-icon class="supervisor_account">groups</mat-icon>
         <span class="full-width" *ngIf="isExpanded || isShowing">Alunos</span>
@@ -17,30 +24,32 @@
         <mat-icon class="supervisor_account">supervisor_account</mat-icon>
         <span class="full-width" *ngIf="isExpanded || isShowing">Professores</span>
       </mat-list-item>
-      <mat-list-item routerLink="/cursos" class="parent">
-        <mat-icon>collections_bookmark</mat-icon>
-        <span class="full-width" *ngIf="isExpanded || isShowing">Cursos</span>
-      </mat-list-item>
       <mat-list-item routerLink="/disciplinas" class="parent">
         <mat-icon class="supervisor_account">description</mat-icon>
 				<span class="full-width" *ngIf="isExpanded || isShowing">
            Disciplinas
           </span>
 			</mat-list-item>
-      <mat-list-item routerLink="/nota" class="parent">
+      <mat-list-item routerLink="/cursos" class="parent">
+        <mat-icon>collections_bookmark</mat-icon>
+        <span class="full-width" *ngIf="isExpanded || isShowing">Cursos</span>
+      </mat-list-item>
+      
+      <mat-list-item routerLink="/matriculas" class="parent">
+        <mat-icon class="supervisor_account">post_add</mat-icon>
+				<span class="full-width" *ngIf="isExpanded || isShowing">
+          Matriculas
+        </span>
+
+			</mat-list-item>
+      <mat-list-item routerLink="/notas" class="parent">
         <mat-icon class="supervisor_account">format_list_numbered_rtl</mat-icon>
 				<span class="full-width" *ngIf="isExpanded || isShowing">
           Notas
         </span>
 
 			</mat-list-item>
-      <mat-list-item routerLink="/materia" class="parent">
-        <mat-icon class="supervisor_account">post_add</mat-icon>
-				<span class="full-width" *ngIf="isExpanded || isShowing">
-          Matérias
-        </span>
-
-			</mat-list-item>
+      
 		</mat-nav-list>
     <mat-nav-list>
 </mat-nav-list>

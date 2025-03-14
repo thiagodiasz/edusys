@@ -1,0 +1,45 @@
+<h2 mat-dialog-title color="mat-primary">Cadastrar Curso</h2>
+<mat-divider></mat-divider>
+<div mat-dialog-content>
+  <form [formGroup]="formCadastro" (ngSubmit)="onSubmit()">
+    <mat-form-field class="example-full-width ml-2">
+      <mat-label>Curso</mat-label>
+      <mat-select formControlName="curso"  [compareWith]="compareCurso">
+        <mat-option *ngFor="let curso of listaCursos; trackBy: trackByCurso" [value]="curso">
+          {{ curso.nome }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formCadastro.get('curso')?.hasError('required')">
+        Curso é obrigatório
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="example-full-width ml-2">
+      <mat-label>Disciplina</mat-label>
+      <mat-select formControlName="disciplina" [compareWith]="compareDisciplina">
+        <mat-option *ngFor="let disciplina of listaDisciplinas; trackBy: trackByDisciplina" [value]="disciplina">
+          {{ disciplina.nome }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formCadastro.get('disciplina')?.hasError('required')">
+        Disciplinas são obrigatórias
+      </mat-error>
+    </mat-form-field>
+   
+    
+    
+    
+  
+
+    <mat-dialog-actions>
+      <button mat-raised-button mat-dialog-close>Cancelar</button>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="formCadastro.invalid"
+      >
+        Salvar
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>
+<mat-divider></mat-divider>

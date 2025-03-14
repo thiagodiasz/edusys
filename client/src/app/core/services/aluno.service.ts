@@ -23,7 +23,7 @@ export class AlunoService extends BaseService{
       return this.http.get<Aluno>(`${this.url}/${id}`, super.ObterHeaderJson());
     }
     inserir(aluno: Aluno): Observable<Aluno> {
-      debugger
+      
       return this.http.post<Aluno>(`${this.url}/inserir`, aluno, super.ObterHeaderJson());
     }
     atualizar(id: number, request: Aluno): Observable<Aluno> {

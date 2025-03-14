@@ -1,17 +1,29 @@
 <div class="row">
   <div class="col-md-12">
-    <mat-card>
+    <mat-card class="shadow">
       <mat-card-header class="mb-3">
         <mat-card-title-group>
+          <mat-card-title> Lista de Cursos </mat-card-title>
 
-        <mat-card-title>
-          Lista de Cursos
-        </mat-card-title>
-        <button mat-raised-button color="primary" (click)="abrirModalCadastrar()">
-          <mat-icon class="supervisor_account">add</mat-icon>
-          Cadastrar                   
-        </button>
-
+          <div class="text-right">
+            <button
+              mat-raised-button
+              class="mr-2"
+              color="secondary"
+              (click)="abrirModalCadastrar()"
+            >
+              <mat-icon class="supervisor_account">add</mat-icon>
+              Cadastrar
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="abrirListaCursoDisciplina()"
+            >
+              <mat-icon class="visibility">visibility</mat-icon>
+              Disciplinas
+            </button>
+          </div>
         </mat-card-title-group>
       </mat-card-header>
       <mat-divider></mat-divider>
@@ -19,20 +31,22 @@
       <mat-card-content class="pt-3">
         <div class="row">
           <div class="col-md-12">
-            <table mat-table [dataSource]="listaCursos" class="mat-elevation-z8">
-             
-            
+            <table
+              mat-table
+              [dataSource]="listaCursos"
+              class="mat-elevation-z2"
+            >
               <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef> # </th>
-                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let element">{{ element.id }}</td>
               </ng-container>
-            
+
               <ng-container matColumnDef="nome">
-                <th mat-header-cell *matHeaderCellDef> Nome </th>
-                <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+                <th mat-header-cell *matHeaderCellDef>Nome</th>
+                <td mat-cell *matCellDef="let element">{{ element.nome }}</td>
               </ng-container>
               <ng-container matColumnDef="acoes">
-                <th mat-header-cell *matHeaderCellDef> Ações </th>
+                <th mat-header-cell *matHeaderCellDef>Ações</th>
                 <td mat-cell *matCellDef="let element">
                   <button mat-icon-button (click)="editarCurso(element)">
                     <mat-icon>edit</mat-icon>
@@ -41,13 +55,12 @@
                     <mat-icon>delete</mat-icon>
                   </button>
                 </td>
-              </ng-container> 
+              </ng-container>
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>  
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
           </div>
         </div>
-                       
       </mat-card-content>
     </mat-card>
   </div>
